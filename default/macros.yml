@@ -1,0 +1,14 @@
+cribl_stream_inventory:
+  lib: custom
+  description: This is the dataset that will be used for most of the dashboard
+  replacement: dataset='cribl_stream_inventory'
+  createdBy: Kelsey Prior
+  modified: 1765911030200
+  created: 1765911030200
+cribl_worker_groups:
+  lib: custom
+  description: This is used for the worker group dropdown in the dashboard
+  replacement: dataset='cribl_worker_groups'
+  createdBy: Kelsey Prior
+  modified: 1765911050485
+  created: 1765911050485

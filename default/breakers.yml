@@ -1,0 +1,70 @@
+cribl_stream_inventory:
+  lib: custom
+  minRawLength: 256
+  rules:
+    - condition: endpointName=='cribl_routes'
+      type: json_array
+      timestampAnchorRegex: /^/
+      timestamp:
+        type: auto
+        length: 150
+      timestampTimezone: local
+      timestampEarliest: -1765904703s
+      timestampLatest: +10years
+      maxEventBytes: 51200
+      disabled: false
+      parserEnabled: false
+      shouldUseDataRaw: true
+      jsonExtractAll: true
+      parser:
+        mode: extract
+        type: csv
+        srcField: ""
+        fields: []
+      eventBreakerRegex: /[\n\r]+(?!\s)/
+      name: cribl_routes
+      fields:
+        - name: datatype
+          value: "'cribl_api_data_cribl_routes'"
+      jsonArrayField: items.routes
+      parentFieldsToCopy: []
+    - condition: endpointName=='cribl_pipelines'
+      type: json_array
+      timestampAnchorRegex: /^/
+      timestamp:
+        type: auto
+        length: 150
+      timestampTimezone: local
+      timestampEarliest: -1765907493s
+      timestampLatest: +10years
+      maxEventBytes: 51200
+      disabled: false
+      parserEnabled: false
+      shouldUseDataRaw: true
+      jsonExtractAll: true
+      eventBreakerRegex: /[\n\r]+(?!\s)/
+      name: cribl_pipelines
+      fields:
+        - name: datatype
+          value: "'cribl_api_data_cribl_pipelines'"
+      jsonArrayField: items
+    - condition: endpointName=='cribl_packs'
+      type: json_array
+      timestampAnchorRegex: /^/
+      timestamp:
+        type: auto
+        length: 150
+      timestampTimezone: local
+      timestampEarliest: -1765907493s
+      timestampLatest: +10years
+      maxEventBytes: 51200
+      disabled: false
+      parserEnabled: false
+      shouldUseDataRaw: true
+      jsonExtractAll: true
+      eventBreakerRegex: /[\n\r]+(?!\s)/
+      name: cribl_packs
+      fields:
+        - name: datatype
+          value: "'cribl_api_data_cribl_packs'"
+      jsonArrayField: items

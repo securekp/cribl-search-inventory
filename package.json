@@ -1,0 +1,1 @@
+{"name":"cribl-search-inventory","version":"0.0.1","author":"Kelsey Prior","description":"This pack is to help display all worker groups, routes, pipelines, and packs in one location","displayName":"Cribl Search Inventory","tags":{"streamtags":["cribl","inventory_management"]},"exports":["*"]}

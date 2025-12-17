@@ -12,3 +12,9 @@ cribl_worker_groups:
   createdBy: Kelsey Prior
   modified: 1765911050485
   created: 1765911050485
+cribl_packs:
+  lib: custom
+  replacement: 'dataset="cribl_packs" '
+  createdBy: Kelsey Prior
+  modified: 1766000352972
+  created: 1766000352972

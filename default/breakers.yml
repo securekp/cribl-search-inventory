@@ -1,5 +1,6 @@
 cribl_stream_inventory:
   lib: custom
+  description: Parse configuration data
   minRawLength: 256
   rules:
     - condition: endpointName=='cribl_routes'
@@ -107,4 +108,89 @@ cribl_stream_inventory:
       fields:
         - name: datatype
           value: "'cribl_stream_inventory_cribl_outputs'"
+      jsonArrayField: items
+cribl_packs:
+  lib: custom
+  description: Parse pack configuration data
+  minRawLength: 256
+  rules:
+    - condition: endpointName=='cribl_packs_inputs'
+      type: json_array
+      timestampAnchorRegex: /^/
+      timestamp:
+        type: auto
+        length: 150
+      timestampTimezone: local
+      timestampEarliest: -1765999759s
+      timestampLatest: +10years
+      maxEventBytes: 51200
+      disabled: false
+      parserEnabled: false
+      shouldUseDataRaw: true
+      jsonExtractAll: true
+      eventBreakerRegex: /[\n\r]+(?!\s)/
+      name: cribl_packs_inputs
+      fields:
+        - name: datatype
+          value: "'cribl_packs_cribl_packs_inputs'"
+      jsonArrayField: items
+    - condition: endpointName=='cribl_packs_outputs'
+      type: json_array
+      timestampAnchorRegex: /^/
+      timestamp:
+        type: auto
+        length: 150
+      timestampTimezone: local
+      timestampEarliest: -1765999759s
+      timestampLatest: +10years
+      maxEventBytes: 51200
+      disabled: false
+      parserEnabled: false
+      shouldUseDataRaw: true
+      jsonExtractAll: true
+      eventBreakerRegex: /[\n\r]+(?!\s)/
+      name: cribl_packs_outputs
+      fields:
+        - name: datatype
+          value: "'cribl_packs_cribl_packs_outputs'"
+      jsonArrayField: items
+    - condition: endpointName=='cribl_packs_routes'
+      type: json_array
+      timestampAnchorRegex: /^/
+      timestamp:
+        type: auto
+        length: 150
+      timestampTimezone: local
+      timestampEarliest: -1765999759s
+      timestampLatest: +10years
+      maxEventBytes: 51200
+      disabled: false
+      parserEnabled: false
+      shouldUseDataRaw: true
+      jsonExtractAll: true
+      eventBreakerRegex: /[\n\r]+(?!\s)/
+      name: cribl_packs_routes
+      fields:
+        - name: datatype
+          value: "'cribl_packs_cribl_packs_routes'"
+      jsonArrayField: items.routes
+    - condition: endpointName=='cribl_packs_pipelines'
+      type: json_array
+      timestampAnchorRegex: /^/
+      timestamp:
+        type: auto
+        length: 150
+      timestampTimezone: local
+      timestampEarliest: -1765999759s
+      timestampLatest: +10years
+      maxEventBytes: 51200
+      disabled: false
+      parserEnabled: false
+      shouldUseDataRaw: true
+      jsonExtractAll: true
+      eventBreakerRegex: /[\n\r]+(?!\s)/
+      name: cribl_packs_pipelines
+      fields:
+        - name: datatype
+          value: "'cribl_packs_cribl_packs_pipelines'"
       jsonArrayField: items

@@ -14,6 +14,7 @@ Here are some of the benefits this Pack provides:
 This pack does require some custom configuration. Follow the below instructions to properly set up the dataset provider. 
 
 ### Configure Dataset Provider for Worker Groups
+
 - Navigate to Data -> Dataset providers.
 - Create a new Dataset provider the type of Generic HTTP API with a name of cribl_worker_groups
 - Add an Endpoint with the following information:
@@ -39,22 +40,27 @@ This pack does require some custom configuration. Follow the below instructions 
 ### Configure Dataset Provider for Everything Else
 - Navigate to Data -> Dataset providers.
 - Create a new Dataset provider the type of Generic HTTP API with a name of cribl_stream_inventory
-- Add 3 Endpoint with the following information:
+- Add 5 Endpoints with the following information:
   - name: cribl_routes
-  - datafield: items
-  - method: get
-  - url: https://<workspace>-<your org name>.cribl.cloud/api/v1/m/${worker_group}/routes
-
+    - datafield: items
+    - method: get
+    - url: https://<workspace>-<your org name>.cribl.cloud/api/v1/m/${worker_group}/routes
   - name: cribl_pipelines
-  - datafield: items
-  - method: get
-  - url: https://<workspace>-<your org name>.cribl.cloud/api/v1/m/${worker_group}/pipelines
-
+    - datafield: items
+    - method: get
+    - url: https://<workspace>-<your org name>.cribl.cloud/api/v1/m/${worker_group}/pipelines
   - name: cribl_packs
-  - datafield: items
-  - method: get
-  - url: https://<workspace>-<your org name>.cribl.cloud/api/v1/m/${worker_group}/packs
-
+    - datafield: items
+    - method: get
+    - url: https://<workspace>-<your org name>.cribl.cloud/api/v1/m/${worker_group}/packs
+  - name: cribl_inputs
+    - datafield: items
+    - method: get
+    - url: https://<workspace>-<your org name>.cribl.cloud/api/v1/m/${worker_group}/system/inputs?includePacks=true
+  - name: cribl_outputs
+    - datafield: items
+    - method: get
+    - url: https://<workspace>-<your org name>.cribl.cloud/api/v1/m/${worker_group}/system/outputs?includePacks=true
 - Go to the Authorization tab
 - Select oAuth. This will require that you create API credentials with owner permissions. You can reference the following doc on creating the credentials: https://docs.cribl.io/api#criblcloud
 - Fill in the following parameters required for oAuth:
@@ -79,13 +85,13 @@ This pack does require some custom configuration. Follow the below instructions 
 ### Configure Cribl Inventory Dataset
 - Navigate to datasets and create a new dataset called cribl_stream_inventory with the following configurations. Note: If you name this dataset something other than cribl_stream_inventory, you will need to update the cribl_stream_inventory macro to reflect the name you have chosen.
 - Dataset provider: cribl_stream_inventory
-- Under enabled endpoints add cribl_routes, cribl_pipelines, and cribl_packs endpoints
+- Under enabled endpoints add cribl_routes, cribl_pipelines, cribl_packs, cribl_inputs, and cribl_outputs endpoints
 - Under Processing, add the datatype rulset from the pack: cribl_stream_inventory
 - Save the dataset.
 
 ## Release Notes
 
-### Version 0.1.0 - 2025-12-16
+### Version 0.1.1 - 2025-12-17
 
 Internal beta
 

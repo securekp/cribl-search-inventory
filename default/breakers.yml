@@ -68,3 +68,43 @@ cribl_stream_inventory:
         - name: datatype
           value: "'cribl_api_data_cribl_packs'"
       jsonArrayField: items
+    - condition: endpointName=='cribl_inputs'
+      type: json_array
+      timestampAnchorRegex: /^/
+      timestamp:
+        type: auto
+        length: 150
+      timestampTimezone: local
+      timestampEarliest: -1765978309s
+      timestampLatest: +10years
+      maxEventBytes: 51200
+      disabled: false
+      parserEnabled: false
+      shouldUseDataRaw: true
+      jsonExtractAll: true
+      eventBreakerRegex: /[\n\r]+(?!\s)/
+      name: cribl_inputs
+      fields:
+        - name: datatype
+          value: "'cribl_stream_inventory_cribl_inputs'"
+      jsonArrayField: items
+    - condition: endpointName=='cribl_outputs'
+      type: json_array
+      timestampAnchorRegex: /^/
+      timestamp:
+        type: auto
+        length: 150
+      timestampTimezone: local
+      timestampEarliest: -1765980734s
+      timestampLatest: +10years
+      maxEventBytes: 51200
+      disabled: false
+      parserEnabled: false
+      shouldUseDataRaw: true
+      jsonExtractAll: true
+      eventBreakerRegex: /[\n\r]+(?!\s)/
+      name: cribl_outputs
+      fields:
+        - name: datatype
+          value: "'cribl_stream_inventory_cribl_outputs'"
+      jsonArrayField: items

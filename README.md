@@ -132,7 +132,7 @@ If you want to have an additional dashboard populated with information from indi
 
 ## Release Notes
 
-### Version 0.9.0 - 2025-12-17
+### Version 0.9.1 - 2025-12-19
 
 Beta Release
 

@@ -23,7 +23,7 @@ This pack does require some custom configuration. Follow the below instructions 
     - method: get
     - url: https://<workspace>-<your org name>.cribl.cloud/api/v1/master/groups
 - Go to the Authorization tab
-- Select oAuth. This will require that you create API credentials with owner permissions. You can reference the following doc on creating the credentials: https://docs.cribl.io/api#criblcloud
+- Select oAuth. This will require that you create API credentials with admin permissions. You can reference the following doc on creating the credentials: https://docs.cribl.io/api#criblcloud
 - Fill in the following parameters required for oAuth:
   - Login url: https://login.cribl.cloud/oauth/token
   - client secret parameter: client_secret
@@ -62,7 +62,7 @@ This pack does require some custom configuration. Follow the below instructions 
     - method: get
     - url: https://<workspace>-<your org name>.cribl.cloud/api/v1/m/${worker_group}/system/outputs?includePacks=true
 - Go to the Authorization tab
-- Select oAuth. This will require that you create API credentials with owner permissions. You can reference the following doc on creating the credentials: https://docs.cribl.io/api#criblcloud
+- Select oAuth. This will require that you create API credentials with admin permissions. You can reference the following doc on creating the credentials: https://docs.cribl.io/api#criblcloud
 - Fill in the following parameters required for oAuth:
   - Login url: https://login.cribl.cloud/oauth/token
   - client secret parameter: client_secret
@@ -112,7 +112,7 @@ If you want to have an additional dashboard populated with information from indi
     - method: get
     - url: https://<workspace>-<your org name>.cribl.cloud/api/v1/m/${worker_group}/p/${pack}/pipelines
 - Go to the Authorization tab
-- Select oAuth. This will require that you create API credentials with owner permissions. You can reference the following doc on creating the credentials: https://docs.cribl.io/api#criblcloud
+- Select oAuth. This will require that you create API credentials with admin permissions. You can reference the following doc on creating the credentials: https://docs.cribl.io/api#criblcloud
 - Fill in the following parameters required for oAuth:
   - Login url: https://login.cribl.cloud/oauth/token
   - client secret parameter: client_secret

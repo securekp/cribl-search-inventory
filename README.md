@@ -132,9 +132,10 @@ If you want to have an additional dashboard populated with information from indi
   - Save the dataset.
 
 ## Release Notes
+### Version 1.0.1 - 2026-01-27
+Fix a couple of typos and clarify some instructions.
 
 ### Version 0.9.1 - 2025-12-19
-
 Beta Release
 
 ## Contributing to the Pack

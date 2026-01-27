@@ -128,6 +128,7 @@ If you want to have an additional dashboard populated with information from indi
 - Navigate to datasets and create a new dataset called cribl_packs with the following configurations. Note: If you name this dataset something other than cribl_packs, you will need to update the cribl_packs macro to reflect the name you have chosen.
   - Dataset provider: cribl_packs
   - Under enabled endpoints add cribl_packs_inputs, cribl_packs_outputs, cribl_packs_routes, cribl_packs_pipelines endpoints
+  - Under processing, add the datatype from the pack: cribl_packs.
   - Save the dataset.
 
 ## Release Notes

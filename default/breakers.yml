@@ -9,9 +9,9 @@ cribl_stream_inventory:
       timestamp:
         type: auto
         length: 150
-      timestampTimezone: local
-      timestampEarliest: -1765904703s
-      timestampLatest: +10years
+        timestampTimezone: local
+        timestampEarliest: -1765904703s
+        timestampLatest: +10years
       maxEventBytes: 51200
       disabled: false
       parserEnabled: false
@@ -27,17 +27,17 @@ cribl_stream_inventory:
       fields:
         - name: datatype
           value: "'cribl_api_data_cribl_routes'"
-      jsonArrayField: items.routes
-      parentFieldsToCopy: []
+          jsonArrayField: items.routes
+          parentFieldsToCopy: []
     - condition: endpointName=='cribl_pipelines'
       type: json_array
       timestampAnchorRegex: /^/
       timestamp:
         type: auto
         length: 150
-      timestampTimezone: local
-      timestampEarliest: -1765907493s
-      timestampLatest: +10years
+        timestampTimezone: local
+        timestampEarliest: -1765907493s
+        timestampLatest: +10years
       maxEventBytes: 51200
       disabled: false
       parserEnabled: false
@@ -48,16 +48,16 @@ cribl_stream_inventory:
       fields:
         - name: datatype
           value: "'cribl_api_data_cribl_pipelines'"
-      jsonArrayField: items
+          jsonArrayField: items
     - condition: endpointName=='cribl_packs'
       type: json_array
       timestampAnchorRegex: /^/
       timestamp:
         type: auto
         length: 150
-      timestampTimezone: local
-      timestampEarliest: -1765907493s
-      timestampLatest: +10years
+        timestampTimezone: local
+        timestampEarliest: -1765907493s
+        timestampLatest: +10years
       maxEventBytes: 51200
       disabled: false
       parserEnabled: false
@@ -68,16 +68,16 @@ cribl_stream_inventory:
       fields:
         - name: datatype
           value: "'cribl_api_data_cribl_packs'"
-      jsonArrayField: items
+          jsonArrayField: items
     - condition: endpointName=='cribl_inputs'
       type: json_array
       timestampAnchorRegex: /^/
       timestamp:
         type: auto
         length: 150
-      timestampTimezone: local
-      timestampEarliest: -1765978309s
-      timestampLatest: +10years
+        timestampTimezone: local
+        timestampEarliest: -1765978309s
+        timestampLatest: +10years
       maxEventBytes: 51200
       disabled: false
       parserEnabled: false
@@ -88,16 +88,16 @@ cribl_stream_inventory:
       fields:
         - name: datatype
           value: "'cribl_stream_inventory_cribl_inputs'"
-      jsonArrayField: items
+          jsonArrayField: items
     - condition: endpointName=='cribl_outputs'
       type: json_array
       timestampAnchorRegex: /^/
       timestamp:
         type: auto
         length: 150
-      timestampTimezone: local
-      timestampEarliest: -1765980734s
-      timestampLatest: +10years
+        timestampTimezone: local
+        timestampEarliest: -1765980734s
+        timestampLatest: +10years
       maxEventBytes: 51200
       disabled: false
       parserEnabled: false
@@ -108,7 +108,7 @@ cribl_stream_inventory:
       fields:
         - name: datatype
           value: "'cribl_stream_inventory_cribl_outputs'"
-      jsonArrayField: items
+          jsonArrayField: items
 cribl_packs:
   lib: custom
   description: Parse pack configuration data
@@ -120,9 +120,9 @@ cribl_packs:
       timestamp:
         type: auto
         length: 150
-      timestampTimezone: local
-      timestampEarliest: -1765999759s
-      timestampLatest: +10years
+        timestampTimezone: local
+        timestampEarliest: -1765999759s
+        timestampLatest: +10years
       maxEventBytes: 51200
       disabled: false
       parserEnabled: false
@@ -133,16 +133,16 @@ cribl_packs:
       fields:
         - name: datatype
           value: "'cribl_packs_cribl_packs_inputs'"
-      jsonArrayField: items
+          jsonArrayField: items
     - condition: endpointName=='cribl_packs_outputs'
       type: json_array
       timestampAnchorRegex: /^/
       timestamp:
         type: auto
         length: 150
-      timestampTimezone: local
-      timestampEarliest: -1765999759s
-      timestampLatest: +10years
+        timestampTimezone: local
+        timestampEarliest: -1765999759s
+        timestampLatest: +10years
       maxEventBytes: 51200
       disabled: false
       parserEnabled: false
@@ -153,16 +153,16 @@ cribl_packs:
       fields:
         - name: datatype
           value: "'cribl_packs_cribl_packs_outputs'"
-      jsonArrayField: items
+          jsonArrayField: items
     - condition: endpointName=='cribl_packs_routes'
       type: json_array
       timestampAnchorRegex: /^/
       timestamp:
         type: auto
         length: 150
-      timestampTimezone: local
-      timestampEarliest: -1765999759s
-      timestampLatest: +10years
+        timestampTimezone: local
+        timestampEarliest: -1765999759s
+        timestampLatest: +10years
       maxEventBytes: 51200
       disabled: false
       parserEnabled: false
@@ -173,16 +173,16 @@ cribl_packs:
       fields:
         - name: datatype
           value: "'cribl_packs_cribl_packs_routes'"
-      jsonArrayField: items.routes
+          jsonArrayField: items.routes
     - condition: endpointName=='cribl_packs_pipelines'
       type: json_array
       timestampAnchorRegex: /^/
       timestamp:
         type: auto
         length: 150
-      timestampTimezone: local
-      timestampEarliest: -1765999759s
-      timestampLatest: +10years
+        timestampTimezone: local
+        timestampEarliest: -1765999759s
+        timestampLatest: +10years
       maxEventBytes: 51200
       disabled: false
       parserEnabled: false
@@ -193,4 +193,30 @@ cribl_packs:
       fields:
         - name: datatype
           value: "'cribl_packs_cribl_packs_pipelines'"
-      jsonArrayField: items
+          jsonArrayField: items
+cribl_worker_metrics:
+  lib: custom
+  description: Parse worker/edge node metrics for heavy talkers
+  minRawLength: 64
+  rules:
+    - condition: endpointName=='cribl_worker_metrics'
+      type: json_array
+      timestampAnchorRegex: /^/
+      timestamp:
+        type: auto
+        length: 150
+        timestampTimezone: local
+        timestampEarliest: -86400s
+        timestampLatest: +1h
+      maxEventBytes: 51200
+      disabled: false
+      parserEnabled: false
+      shouldUseDataRaw: true
+      jsonExtractAll: true
+      eventBreakerRegex: /[\n\r]+(?!\s)/
+      name: cribl_worker_metrics
+      fields:
+        - name: datatype
+          value: "'cribl_metrics_worker'"
+          jsonArrayField: items
+          parentFieldsToCopy: []

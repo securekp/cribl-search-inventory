@@ -58,7 +58,7 @@ This pack helps you see your Cribl infrastructure, configurations, and **node me
   - **url**: `https://<workspace>-<org>.cribl.cloud/api/v1/master/workers`
 - Use the same **OAuth** settings as in step 1.
 
-> **Note:** The Cribl API returns workers from all groups (Stream worker groups and Edge fleets). The response may use `items` or another array key; if your API uses a different key (e.g. `workers`), set **datafield** to that key. The **Heavy Talkers** dashboard expects fields such as `group`, `id`, `info.hostname`, `lastMsgTime`, `status`. Throughput metrics in Search typically come from **`lastMetrics.total`**: `lastMetrics.total.in_events`, `lastMetrics.total.out_events`, `lastMetrics.total.in_bytes`, `lastMetrics.total.out_bytes`. The dashboard uses these first and falls back to flat camelCase/snake_case if present.
+> **Note:** The Cribl API returns workers from all groups (Stream worker groups and Edge fleets). The response may use `items` or another array key; if your API uses a different key (e.g. `workers`), set **datafield** to that key. The **Heavy Talkers** dashboard expects fields such as `group`, `id`, `info.hostname`, `lastMsgTime`, `status`. Throughput metrics in Search use bracket syntax on **`lastMetrics`**: `lastMetrics["total.in_events"]`, `lastMetrics["total.out_events"]`, `lastMetrics["total.in_bytes"]`, `lastMetrics["total.out_bytes"]`. The dashboard uses these first and falls back to flat camelCase/snake_case if present.
 
 ### 4. Configure Cribl Worker Groups Dataset
 
@@ -109,6 +109,9 @@ To show inputs/outputs/routes/pipelines for a **selected pack** (second dashboar
 - Create dataset **cribl_packs** with provider **cribl_packs**, enable those endpoints, and add the pack’s **cribl_packs** processing ruleset. Update the **cribl_packs** macro if you change the dataset name.
 
 ## Release Notes
+### Version 1.1.1
+Heavy Talkers dashboard: use correct Search syntax for throughput metrics (`lastMetrics["total.in_events"]`, `lastMetrics["total.out_events"]`, and byte fields). README updated for metric field names and bracket syntax.
+
 ### Version 1.0.1 - 2026-01-27
 Fix a couple of typos and clarify some instructions.
 

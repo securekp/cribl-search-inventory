@@ -57,7 +57,7 @@
       "config": {},
       "search": {
         "type": "inline",
-        "query": "${cribl_worker_metrics} (group==\"$fleet\" or \"$fleet\"==\"*\") | sort by coalesce(lastMetrics[\"total.out_events\"], outEvents, out_events, 0) desc, lastMsgTime desc | take 25 | project group, id, hostname=info.hostname, out_events=coalesce(lastMetrics[\"total.out_events\"], outEvents, out_events), in_events=coalesce(lastMetrics[\"total.in_events\"], inEvents, in_events), out_bytes=coalesce(lastMetrics[\"total.out_bytes\"], outBytes, out_bytes), in_bytes=coalesce(lastMetrics[\"total.in_bytes\"], inBytes, in_bytes), lastMsgTime, status",
+        "query": "${cribl_worker_metrics} (group==\"$fleet\" or \"$fleet\"==\"*\") | sort by coalesce(lastMetrics[\"total.out_events\"], outEvents, out_events, 0) desc, lastMsgTime desc | take 25 | project group, id, hostname=info.hostname, in_events=coalesce(lastMetrics[\"total.in_events\"], inEvents, in_events), out_events=coalesce(lastMetrics[\"total.out_events\"], outEvents, out_events), in_bytes=coalesce(lastMetrics[\"total.in_bytes\"], inBytes, in_bytes), out_bytes=coalesce(lastMetrics[\"total.out_bytes\"], outBytes, out_bytes), lastMsgTime, status",
         "earliest": "-1h",
         "latest": "now"
       },
@@ -70,7 +70,7 @@
       "config": {},
       "search": {
         "type": "inline",
-        "query": "${cribl_worker_metrics} (group==\"$worker_group\" or \"$worker_group\"==\"*\") | sort by coalesce(lastMetrics[\"total.out_events\"], outEvents, out_events, 0) desc, lastMsgTime desc | take 25 | project group, id, hostname=info.hostname, out_events=coalesce(lastMetrics[\"total.out_events\"], outEvents, out_events), in_events=coalesce(lastMetrics[\"total.in_events\"], inEvents, in_events), out_bytes=coalesce(lastMetrics[\"total.out_bytes\"], outBytes, out_bytes), in_bytes=coalesce(lastMetrics[\"total.in_bytes\"], inBytes, in_bytes), lastMsgTime, status",
+        "query": "${cribl_worker_metrics} (group==\"$worker_group\" or \"$worker_group\"==\"*\") | sort by coalesce(lastMetrics[\"total.out_events\"], outEvents, out_events, 0) desc, lastMsgTime desc | take 25 | project group, id, hostname=info.hostname, in_events=coalesce(lastMetrics[\"total.in_events\"], inEvents, in_events), out_events=coalesce(lastMetrics[\"total.out_events\"], outEvents, out_events), in_bytes=coalesce(lastMetrics[\"total.in_bytes\"], inBytes, in_bytes), out_bytes=coalesce(lastMetrics[\"total.out_bytes\"], outBytes, out_bytes), lastMsgTime, status",
         "earliest": "-1h",
         "latest": "now"
       },

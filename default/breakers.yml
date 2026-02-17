@@ -199,7 +199,7 @@ cribl_worker_metrics:
   description: Parse worker/edge node metrics for heavy talkers
   minRawLength: 64
   rules:
-    - condition: endpointName=='cribl_worker_metrics'
+    - condition: endpointName=='cribl_worker_metrics' || (typeof endpointName==='string' && endpointName.startsWith('cribl_worker_metrics_'))
       type: json_array
       timestampAnchorRegex: /^/
       timestamp:

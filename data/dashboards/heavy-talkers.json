@@ -56,7 +56,7 @@
       "type": "markdown.default",
       "variant": "markdown",
       "config": {
-        "markdown": "# Heavy Talkers\n\nView **Edge nodes** (by Fleet) and **Worker nodes** (by Worker group) with the highest throughput. Use the **Time Range** picker to set the window; use the **Fleet** dropdown to filter Edge heavy talkers and **Worker group** for Stream workers. Choose * for all. Tables show top nodes by outbound events (or last activity if metrics are not available).\n",
+        "markdown": "# Heavy Talkers\n\nView **Edge nodes** (by Fleet) and **Worker nodes** (by Worker group) with the highest throughput. Use the **Time Range** picker to set the window; use the **Fleet** dropdown to filter Edge heavy talkers and **Worker group** for Stream workers. Choose * for all. Tables show top nodes by outbound events (or by last activity when metrics are not available). *Note:* Throughput metrics for **Stream Worker** nodes often require adding worker-group–scoped workers endpoints to your metrics dataset; see the pack README.\n",
         "axis": {}
       },
       "layout": { "x": 0, "y": 2, "w": 12, "h": 2 }

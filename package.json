@@ -1,6 +1,6 @@
 {
   "name": "cribl-search-inventory",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "author": "Kelsey Prior - Cribl",
   "description": "This pack helps display worker groups, routes, pipelines, packs, and node metrics (heavy talkers) in one location",
   "displayName": "Cribl Search Inventory",

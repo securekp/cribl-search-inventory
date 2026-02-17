@@ -18,3 +18,10 @@ cribl_packs:
   createdBy: Kelsey Prior
   modified: 1766000352972
   created: 1766000352972
+cribl_worker_metrics:
+  lib: custom
+  description: Dataset for worker/edge metrics (heavy talkers)
+  replacement: dataset='cribl_worker_metrics'
+  createdBy: Kelsey Prior
+  modified: 1769600000000
+  created: 1769600000000

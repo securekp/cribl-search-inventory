@@ -109,17 +109,11 @@ To show inputs/outputs/routes/pipelines for a **selected pack** (second dashboar
 - Create dataset **cribl_packs** with provider **cribl_packs**, enable those endpoints, and add the pack’s **cribl_packs** processing ruleset. Update the **cribl_packs** macro if you change the dataset name.
 
 ## Release Notes
+### Version 1.0.1 - 2026-01-27
+Fix a couple of typos and clarify some instructions.
 
-### Version 1.1.0
-
-- Added **metrics** support: dataset provider and dataset for worker/edge node data.
-- Added **Heavy Talkers** dashboard: top Edge nodes (by fleet) and Worker nodes (by worker group), filterable by Fleet or Worker group.
-
-### Version 1.0.1 (2026-01-27)
-
-- Typos and instruction clarifications.
-
-### Version 0.9.1 (2025-12-19)
+### Version 0.9.1 - 2025-12-19
+Beta Release
 
 - Beta release.
 
@@ -132,5 +126,4 @@ To contribute or report issues, reach out to Kelsey Prior (cribl.io) on [Cribl C
 kprior@cribl.io
 
 ## License
-
-Apache 2.0 – see [LICENSE](LICENSE).
+This Pack uses the following license: [`Apache 2.0`](https://github.com/criblio/appscope/blob/master/LICENSE).

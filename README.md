@@ -60,12 +60,12 @@ This pack helps you see your Cribl infrastructure, configurations, and **node me
 
 **Edge vs Worker metrics:** The **master/workers** response often includes **lastMetrics** (throughput) **only for Edge nodes**. Stream Worker nodes from that endpoint usually have `group`, `id`, `info.hostname`, `lastMsgTime`, `status` but may not include `lastMetrics`. The Edge table will show in/out events and bytes when available; the Worker table will still list nodes and sort by `lastMsgTime` when metrics are missing.
 
-**Optional – Stream Worker node metrics:** To get throughput metrics for **Stream Worker** nodes, add **one endpoint per worker group** that uses the worker-group–scoped workers API (if your Cribl version supports it). In the same **cribl_metrics** provider, add endpoints such as:
-  - **name**: `cribl_worker_metrics_default`
+**Optional – Stream Worker node metrics:** To get throughput metrics for **Stream Worker** nodes, add a **variabilized** endpoint (same pattern as **cribl_stream_inventory**) that uses the worker-group–scoped workers API. In the same **cribl_metrics** provider, add one endpoint:
+  - **name**: `cribl_worker_metrics_stream`
   - **datafield**: `items`
   - **method**: get
-  - **url**: `https://<workspace>-<org>.cribl.cloud/api/v1/m/default/workers`
-  (and similarly `cribl_worker_metrics_<group>` with url `.../api/v1/m/<group>/workers` for each other worker group). Enable these endpoints on the **cribl_worker_metrics** dataset along with `cribl_worker_metrics`. The pack’s breaker will parse any endpoint whose name starts with `cribl_worker_metrics_` the same way. Check your Cribl **Settings → Global API Reference** for the exact path (e.g. under a “distributed” or “workers” tag).
+  - **url**: `https://<workspace>-<org>.cribl.cloud/api/v1/m/${worker_group}/workers`
+  Enable this endpoint on the **cribl_worker_metrics** dataset along with `cribl_worker_metrics`. The `worker_group` variable is supplied by the Heavy Talkers dashboard (Worker Group dropdown), so the provider will request workers for the selected group. The pack’s breaker parses `cribl_worker_metrics_*` the same way. Check your Cribl **Settings → Global API Reference** for the exact path (e.g. under a “distributed” or “workers” tag).
 
 > **Note:** The Cribl API response may use `items` or another array key; if your API uses a different key (e.g. `workers`), set **datafield** to that key. The **Heavy Talkers** dashboard expects fields such as `group`, `id`, `info.hostname`, `lastMsgTime`, `status`. Throughput metrics use bracket syntax on **`lastMetrics`**: `lastMetrics["total.in_events"]`, `lastMetrics["total.out_events"]`, `lastMetrics["total.in_bytes"]`, `lastMetrics["total.out_bytes"]`. The dashboard uses these first and falls back to flat camelCase/snake_case if present.
 
@@ -88,7 +88,7 @@ This pack helps you see your Cribl infrastructure, configurations, and **node me
 
 - Create dataset **cribl_worker_metrics**.
   - **Dataset provider**: cribl_metrics
-  - **Enabled endpoints**: cribl_worker_metrics
+  - **Enabled endpoints**: cribl_worker_metrics (and optionally cribl_worker_metrics_stream if you added the variabilized Stream workers endpoint)
   - **Processing**: add the pack’s **cribl_worker_metrics** datatype ruleset
 - If you use a different name, update the **cribl_worker_metrics** macro.
 

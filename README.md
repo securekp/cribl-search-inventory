@@ -6,7 +6,7 @@ This pack uses Cribl Search **HTTP API Dataset** providers for config data and t
 
 - **Worker groups** – List of groups/fleets from the Leader API
 - **Stream inventory** – Routes, pipelines, packs, inputs, outputs per worker group, using a variabilized `${worker_group}` URL
-- **Heavy Talkers for Edge** – One dashboard: line chart of top 10 nodes’ throughput over time (in/out events and bytes), table of top Edge nodes by fleet, time picker, and Fleet dropdown
+- **Heavy Talkers for Edge** – One dashboard: four line charts (in/out events and bytes per host over time), table of top Edge nodes by fleet, time picker, and Fleet dropdown
 
 ## Deployment Overview
 

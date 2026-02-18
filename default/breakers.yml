@@ -217,7 +217,7 @@ cribl_packs:
           jsonArrayField: items
 cribl_worker_metrics:
   lib: custom
-  description: Parse worker/edge node metrics for heavy talkers
+  description: Parse worker/edge node metrics for Edge Node Statistics
   minRawLength: 64
   rules:
     - condition: endpointName=='cribl_worker_metrics'

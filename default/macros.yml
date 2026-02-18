@@ -20,7 +20,7 @@ cribl_packs:
   created: 1766000352972
 cribl_worker_metrics:
   lib: custom
-  description: Dataset for worker/edge metrics (heavy talkers)
+  description: Dataset for worker/edge metrics (Edge Node Statistics)
   replacement: dataset='cribl_worker_metrics'
   createdBy: Kelsey Prior
   modified: 1769600000000

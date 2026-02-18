@@ -1,0 +1,66 @@
+{
+  "name": "Edge Node Statistics",
+  "description": "Top 10 Edge nodes by bytes in; shows bytes out and last message time.",
+  "created": 1769600000000,
+  "modified": 1769600000000,
+  "createdBy": "pack",
+  "modifiedBy": "pack",
+  "displayCreatedBy": "Cribl Search Inventory Pack",
+  "displayModifiedBy": "Cribl Search Inventory Pack",
+  "schedule": {
+    "enabled": false,
+    "cronSchedule": "0 0 * * *",
+    "tz": "UTC",
+    "keepLastN": 2
+  },
+  "groups": {},
+  "elements": [
+    {
+      "id": "ens-time-range",
+      "type": "input.timerange",
+      "variant": "input",
+      "title": "Time Range",
+      "inputId": "time_range",
+      "config": {
+        "defaultValue": {
+          "earliest": "-1h",
+          "latest": "now",
+          "timezone": "local"
+        }
+      },
+      "layout": { "x": 0, "y": 0, "w": 2, "h": 2 }
+    },
+    {
+      "id": "ens-fleet-dropdown",
+      "type": "input.dropdown",
+      "variant": "input",
+      "title": "Fleet",
+      "inputId": "fleet",
+      "config": { "defaultValue": "*", "field": "id" },
+      "search": {
+        "type": "inline",
+        "query": "${cribl_worker_groups} isFleet==true | summarize by id",
+        "earliest": "$time_range.earliest$",
+        "latest": "$time_range.latest$",
+        "timezone": "$time_range.timezone$",
+        "timeRangeInputId": "time_range"
+      },
+      "layout": { "x": 2, "y": 0, "w": 2, "h": 2 }
+    },
+    {
+      "id": "ens-top10-table",
+      "type": "list.table",
+      "title": "Top 10 Edge nodes by bytes in",
+      "config": {},
+      "search": {
+        "type": "inline",
+        "query": "${cribl_worker_metrics} (group==\"$fleet\" or \"$fleet\"==\"*\") | sort by coalesce(lastMetrics[\"total.in_bytes\"], inBytes, in_bytes, 0) desc, lastMsgTime desc | take 10 | project host=coalesce(info.hostname, id), id, in_bytes=coalesce(lastMetrics[\"total.in_bytes\"], inBytes, in_bytes), out_bytes=coalesce(lastMetrics[\"total.out_bytes\"], outBytes, out_bytes), lastMsgTime",
+        "earliest": "$time_range.earliest$",
+        "latest": "$time_range.latest$",
+        "timezone": "$time_range.timezone$",
+        "timeRangeInputId": "time_range"
+      },
+      "layout": { "x": 0, "y": 2, "w": 12, "h": 6 }
+    }
+  ]
+}

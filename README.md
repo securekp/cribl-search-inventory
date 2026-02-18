@@ -68,7 +68,7 @@ The pack adds the **Heavy Talkers for Edge** dashboard. It uses the **built-in c
 
 - **Time Range** – Picker controls the time window (`$time_range.earliest$` / `$time_range.latest$`).
 - **Fleet** – Dropdown lists Edge fleets from **cribl_metrics** (`worker_group`). Choose * for all fleets.
-- **Line charts** – Four charts (inbound/outbound events and bytes) over time, one line per Edge node (5‑minute bins). Same fleet and time filters as the table.
+- **Line charts** – Four charts (inbound/outbound events and bytes) over time, one line per Edge node (`timestats` span=1h). Same fleet and time filters as the table.
 - **Table** – Top Edge nodes by outbound events. Throughput is aggregated from **cribl_metrics** rows: `total.in_bytes`, `total.out_bytes`, `total.in_events`, `total.out_events` per node (`instance`) and fleet (`worker_group`).
 
 ---

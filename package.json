@@ -2,7 +2,7 @@
   "name": "cribl-search-inventory",
   "version": "1.1.5",
   "author": "Kelsey Prior - Cribl",
-  "description": "This pack helps display worker groups, routes, pipelines, packs, and Heavy Talkers for Edge dashboard (top Edge nodes by throughput) in one location",
+  "description": "This pack helps display worker groups, routes, pipelines, packs, and Heavy Talkers for Edge dashboard (Fleet filter, line charts, top nodes) in one location",
   "displayName": "Cribl Search Inventory",
   "tags": {
     "streamtags": ["cribl", "inventory_management"]

@@ -1,22 +1,22 @@
 # Cribl Inventory
 
-This pack uses Cribl Search **HTTP API Dataset** providers for config data and the **built-in cribl_metrics** dataset for Edge throughput. It gives you a single place to see worker groups, routes, pipelines, packs, inputs, outputs, and a **Heavy Talkers for Edge** dashboard (top Edge nodes by in/out bytes and events, filterable by fleet and time range).
+This pack uses Cribl Search **HTTP API Dataset** providers to pull data from the Cribl Stream/Edge API. It gives you a single place to see worker groups, routes, pipelines, packs, inputs, outputs, and a **Heavy Talkers** dashboard for Edge and Worker nodes (top nodes by throughput, filterable by Fleet or Worker group).
 
 ## What You Get
 
 - **Worker groups** – List of groups/fleets from the Leader API
 - **Stream inventory** – Routes, pipelines, packs, inputs, outputs per worker group, using a variabilized `${worker_group}` URL
-- **Heavy Talkers for Edge** – One dashboard: four line charts (in/out events and bytes per host over time), table of top Edge nodes by fleet, time picker, and Fleet dropdown
+- **Heavy Talkers for Edge** – One dashboard: Fleet filter, four line charts (in/out events and bytes over time by node), and table of top Edge nodes; all from **cribl_worker_metrics** (Leader `master/workers` API)
 
 ## Deployment Overview
 
-You will create **two dataset providers** and **two datasets** for config dashboards (plus one optional for pack details). **Heavy Talkers for Edge** uses the **built-in cribl_metrics** dataset in Cribl Search (no provider or dataset setup required).
+You will create **three dataset providers** and **three datasets** (plus one optional for pack details):
 
 | Provider               | Dataset                | Purpose |
 |------------------------|------------------------|--------|
-| cribl_worker_groups    | cribl_worker_groups    | Groups/fleets list (Stream Configuration, Pack Information) |
+| cribl_worker_groups    | cribl_worker_groups    | Groups/fleets list (Fleet dropdown in Heavy Talkers; Stream Configuration, Pack Information) |
 | cribl_stream_inventory | cribl_stream_inventory | Config per `${worker_group}` (routes, pipelines, packs, inputs, outputs) |
-| *(built-in)*           | **cribl_metrics**      | **Heavy Talkers for Edge** – in/out bytes and events per Edge node (filter by fleet and time range) |
+| cribl_metrics          | cribl_worker_metrics   | Leader `master/workers` – **Heavy Talkers** (Edge and Worker nodes, throughput from lastMetrics when available) |
 
 ---
 
@@ -41,7 +41,7 @@ Create API credentials with admin permissions: [Cribl Cloud API](https://docs.cr
 - OAuth: use the settings from Step 1.
 - **Data → Datasets** → create **cribl_worker_groups**, provider **cribl_worker_groups**, enable **cribl_groups**, save.
 
-This dataset drives the **Worker Group / Fleet** dropdowns on the Stream Configuration and Pack Information dashboards.
+This dataset drives the **Fleet** dropdown on the Heavy Talkers dashboard (groups with `isFleet==true`) and the Stream Configuration and Pack Information dashboards.
 
 ---
 
@@ -62,22 +62,31 @@ This dataset drives the **Worker Group / Fleet** dropdowns on the Stream Configu
 
 ---
 
+## Step 4: Provider and Dataset – Metrics (Heavy Talkers)
+
+- **Data → Dataset providers** → **Generic HTTP API** named **cribl_metrics**.
+- **Endpoint**: name `cribl_worker_metrics`, datafield `items`, method get, url `https://<workspace>-<org>.cribl.cloud/api/v1/master/workers`
+- OAuth: use the settings from Step 1.
+- **Data → Datasets** → create **cribl_worker_metrics**, provider **cribl_metrics**, enable **cribl_worker_metrics**, add the pack’s **cribl_worker_metrics** datatype ruleset.
+
+The Leader `master/workers` API returns workers from all groups (Stream worker groups and Edge fleets). The dashboard expects fields such as `group`, `id`, `info.hostname`, `lastMsgTime`, `status`. Throughput uses **lastMetrics** with bracket syntax: `lastMetrics["total.in_events"]`, `lastMetrics["total.out_events"]`, `lastMetrics["total.in_bytes"]`, `lastMetrics["total.out_bytes"]`, and falls back to flat camelCase/snake_case if your API returns those. If your API uses a different array key than `items` (e.g. `workers`), set **datafield** accordingly.
+
+---
+
 ## Heavy Talkers for Edge Dashboard
 
-The pack adds the **Heavy Talkers for Edge** dashboard. It uses the **built-in cribl_metrics** dataset in Cribl Search (no HTTP API provider or dataset required).
+The pack adds the **Heavy Talkers for Edge** dashboard. All data comes from **cribl_worker_metrics** (Leader `master/workers` API).
 
-- **Time Range** – Picker controls the time window (`$time_range.earliest$` / `$time_range.latest$`).
-- **Fleet** – Dropdown lists Edge fleets from **cribl_metrics** (`worker_group`). Choose * for all fleets.
-- **Line charts** – Four charts (inbound/outbound events and bytes) over time, one line per Edge node (`timestats` span=1h). Same fleet and time filters as the table.
-- **Table** – Top Edge nodes by outbound events. Throughput is aggregated from **cribl_metrics** rows: `total.in_bytes`, `total.out_bytes`, `total.in_events`, `total.out_events` per node (`instance`) and fleet (`worker_group`).
+- **Time Range** – Picker sets the time window for dataset refresh.
+- **Fleet** – Dropdown filters by Edge fleet (from cribl_worker_groups, `isFleet==true`). Choose * for all fleets.
+- **Line charts** – Four charts (inbound/outbound events and inbound/outbound bytes) over time, one line per Edge node (1h bins). When the dataset is refreshed over time, charts show trends; otherwise they show the latest snapshot per node.
+- **Table** – Top 25 Edge nodes by outbound events (or by `lastMsgTime` if metrics are not in the API). Columns: group, id, hostname, in/out events, in/out bytes, lastMsgTime, status.
 
 ---
 
 ## Notes
 
-- If your API uses a different array key than `items` (e.g. `workers`), set **datafield** accordingly for that endpoint.
-- Heavy Talkers for Edge uses the built-in **cribl_metrics** dataset; ensure Edge nodes emit metrics with `dist_mode==managed-edge`, `worker_group`, `instance`, and `metric` / `value` (e.g. `total.in_bytes`, `total.out_bytes`, `total.in_events`, `total.out_events`).
-- If you rename any dataset used by config dashboards, update the corresponding macro in the pack (cribl_worker_groups, cribl_stream_inventory).
+- If you rename any dataset, update the corresponding macro in the pack (cribl_worker_groups, cribl_stream_inventory, cribl_worker_metrics).
 
 ---
 

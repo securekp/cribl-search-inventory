@@ -63,7 +63,7 @@ This dataset drives the Fleet and Worker Group dropdowns. Ensure the API returns
 
 - **Data → Datasets** → create **cribl_stream_inventory**, provider **cribl_stream_inventory**, enable all six endpoints, add the pack’s **cribl_stream_inventory** datatype ruleset.
 
-The **cribl_workers** endpoint feeds the Heavy Talkers **Worker nodes** table. The Cribl API `GET /m/{worker_group}/workers` returns the **worker list (config/status)** for that group (id, group, info.hostname, lastMsgTime, status); it does **not** include throughput (`lastMetrics`) in that response. So the Worker table will show Stream workers and sort by last activity; the in/out events and bytes columns may be empty unless your Cribl version adds them. Throughput for Stream workers is available from Cribl’s **system metrics** API (e.g. `total.in_events` / `total.out_events` per worker node); that would require a separate metrics dataset if you need those numbers in the dashboard.
+The **cribl_workers** endpoint feeds the Heavy Talkers **Worker nodes** table. The search must use **dataset and worker_group** in the first part (e.g. `dataset='cribl_stream_inventory' worker_group=$worker_group`). **worker_group cannot be a wildcard** when querying the variabilized dataset—the dropdown must select a specific group (default is `default`). The Cribl API `GET /m/{worker_group}/workers` returns the **worker list (config/status)** only (id, group, info.hostname, lastMsgTime, status); it does **not** return throughput (`lastMetrics`). To get metrics for Stream workers, something must change on the **datasource provider side**—e.g. an endpoint that returns per-worker metrics (such as Cribl’s system metrics API) and is wired into the dataset. Until then, the Worker table shows nodes and last activity; in/out events and bytes columns stay empty for Stream.
 
 ---
 
@@ -84,7 +84,7 @@ The pack adds the **Heavy Talkers – Edge & Worker Nodes** dashboard.
 
 - **Time Range** – Picker controls the time window for all panels (`$time_range.earliest$` / `$time_range.latest$`).
 - **Fleet (Edge)** – Dropdown filters the Edge table by fleet (groups with `isFleet==true`). Data from **cribl_worker_metrics**.
-- **Worker Group (Stream)** – Dropdown filters the Worker table by worker group (`isFleet==false`). Data from **cribl_stream_inventory**, endpoint **cribl_workers**. The query filters by **worker_group** so only rows for the selected group are used; use * to see all groups.
+- **Worker Group (Stream)** – Dropdown filters the Worker table by worker group (`isFleet==false`). Data from **cribl_stream_inventory**, endpoint **cribl_workers**. The query uses `dataset='cribl_stream_inventory' worker_group=$worker_group` (same pattern as the other dashboards in this pack). You must select a **specific** group—wildcard is not supported for the variabilized dataset.
 
 Tables show top nodes by outbound events (or by last activity when metrics are missing). Throughput columns use **lastMetrics** with bracket syntax in Search: `lastMetrics["total.in_events"]`, `lastMetrics["total.out_events"]`, `lastMetrics["total.in_bytes"]`, `lastMetrics["total.out_bytes"]`. The dashboard also accepts flat camelCase/snake_case if your API returns those.
 

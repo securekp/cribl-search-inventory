@@ -102,9 +102,6 @@ To show inputs/outputs/routes/pipelines for a **selected pack**:
 
 | Version | Date       | Changes |
 |---------|------------|--------|
-| 1.1.5   | 2026-02-17 | **Heavy Talkers for Edge**: added line chart – top 10 nodes’ throughput over time (inbound/outbound events and bytes in one chart). README updated. |
-| 1.1.4   | 2026-02-17 | **Heavy Talkers for Edge** now uses the **built-in cribl_metrics** dataset (no HTTP API provider/dataset). Fleet dropdown and table query cribl_metrics; in/out bytes and events per Edge node. Step 4 and cribl_worker_metrics removed from README. |
-| 1.1.3   | 2026-02-17 | **Heavy Talkers for Edge** only: renamed dashboard, removed Stream/Worker table and Worker Group dropdown; README and versioning updated. |
 | 1.1.2   | 2026-02-17 | Heavy Talkers: time picker; in/out column order; both tables use **cribl_worker_metrics** (Worker table filters by group; avoids 404 when `/m/{group}/workers` not available). |
 | 1.1.1   | 2026-01-27 | Heavy Talkers: correct Search syntax for throughput metrics (`lastMetrics["total.*"]`). |
 | 1.0.1   | 2026-01-27 | Typos and instruction clarifications. |

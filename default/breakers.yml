@@ -109,6 +109,27 @@ cribl_stream_inventory:
         - name: datatype
           value: "'cribl_stream_inventory_cribl_outputs'"
           jsonArrayField: items
+    - condition: endpointName=='cribl_workers'
+      type: json_array
+      timestampAnchorRegex: /^/
+      timestamp:
+        type: auto
+        length: 150
+        timestampTimezone: local
+        timestampEarliest: -86400s
+        timestampLatest: +1h
+      maxEventBytes: 51200
+      disabled: false
+      parserEnabled: false
+      shouldUseDataRaw: true
+      jsonExtractAll: true
+      eventBreakerRegex: /[\n\r]+(?!\s)/
+      name: cribl_workers
+      fields:
+        - name: datatype
+          value: "'cribl_stream_inventory_cribl_workers'"
+          jsonArrayField: items
+          parentFieldsToCopy: []
 cribl_packs:
   lib: custom
   description: Parse pack configuration data
@@ -199,7 +220,7 @@ cribl_worker_metrics:
   description: Parse worker/edge node metrics for heavy talkers
   minRawLength: 64
   rules:
-    - condition: endpointName=='cribl_worker_metrics' || (typeof endpointName==='string' && endpointName.startsWith('cribl_worker_metrics_'))
+    - condition: endpointName=='cribl_worker_metrics'
       type: json_array
       timestampAnchorRegex: /^/
       timestamp:

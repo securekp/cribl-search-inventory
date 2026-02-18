@@ -56,7 +56,7 @@
       "type": "markdown.default",
       "variant": "markdown",
       "config": {
-        "markdown": "# Heavy Talkers\n\nView **Edge nodes** (by Fleet) and **Worker nodes** (by Worker group) with the highest throughput. Use the **Time Range** picker to set the window; use the **Fleet** dropdown to filter Edge heavy talkers and **Worker group** for Stream workers. Choose * for all. Tables show top nodes by outbound events (or by last activity when metrics are not available). *Note:* Throughput metrics for **Stream Worker** nodes often require adding worker-group–scoped workers endpoints to your metrics dataset; see the pack README.\n",
+        "markdown": "# Heavy Talkers\n\nView **Edge nodes** (by Fleet) and **Worker nodes** (by Worker group) with the highest throughput. Use the **Time Range** picker to set the window; use the **Fleet** dropdown to filter Edge heavy talkers and **Worker group** for Stream workers. Choose * for all. Edge table uses **cribl_worker_metrics**; Worker table uses **cribl_stream_inventory** (cribl_workers endpoint) so the same provider and `${worker_group}` variable are used.\n",
         "axis": {}
       },
       "layout": { "x": 0, "y": 2, "w": 12, "h": 2 }
@@ -82,7 +82,7 @@
       "config": {},
       "search": {
         "type": "inline",
-        "query": "${cribl_worker_metrics} (group==\"$worker_group\" or \"$worker_group\"==\"*\") | sort by coalesce(lastMetrics[\"total.out_events\"], outEvents, out_events, 0) desc, lastMsgTime desc | take 25 | project group, id, hostname=info.hostname, in_events=coalesce(lastMetrics[\"total.in_events\"], inEvents, in_events), out_events=coalesce(lastMetrics[\"total.out_events\"], outEvents, out_events), in_bytes=coalesce(lastMetrics[\"total.in_bytes\"], inBytes, in_bytes), out_bytes=coalesce(lastMetrics[\"total.out_bytes\"], outBytes, out_bytes), lastMsgTime, status",
+        "query": "${cribl_stream_inventory} endpointName==\"cribl_workers\" (group==\"$worker_group\" or \"$worker_group\"==\"*\") | sort by coalesce(lastMetrics[\"total.out_events\"], outEvents, out_events, 0) desc, lastMsgTime desc | take 25 | project group, id, hostname=info.hostname, in_events=coalesce(lastMetrics[\"total.in_events\"], inEvents, in_events), out_events=coalesce(lastMetrics[\"total.out_events\"], outEvents, out_events), in_bytes=coalesce(lastMetrics[\"total.in_bytes\"], inBytes, in_bytes), out_bytes=coalesce(lastMetrics[\"total.out_bytes\"], outBytes, out_bytes), lastMsgTime, status",
         "earliest": "$time_range.earliest$",
         "latest": "$time_range.latest$",
         "timezone": "$time_range.timezone$"

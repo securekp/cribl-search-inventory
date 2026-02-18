@@ -117,17 +117,12 @@ To show inputs/outputs/routes/pipelines for a **selected pack**:
 
 ## Release Notes
 
-### Version 1.1.2
-Heavy Talkers: time picker (`$time_range.earliest$` / `$time_range.latest$`); in/out column order (in then out); Worker table uses **cribl_stream_inventory** (cribl_workers) so Stream metrics use the same provider and `${worker_group}`; README clarified (no mixing dataset providers).
-
-### Version 1.1.1
-Heavy Talkers: correct Search syntax for throughput metrics (`lastMetrics["total.*"]`). README updated for metric field names and bracket syntax.
-
-### Version 1.0.1 - 2026-01-27
-Typos and instruction clarifications.
-
-### Version 0.9.1 - 2025-12-19
-Beta release.
+| Version | Date       | Changes |
+|---------|------------|--------|
+| 1.1.2   | 2026-02-17 | Heavy Talkers: time picker; in/out column order; Worker table from **cribl_stream_inventory** (cribl_workers); README cleanup and no mixing dataset providers. |
+| 1.1.1   | 2026-01-27 | Heavy Talkers: correct Search syntax for throughput metrics (`lastMetrics["total.*"]`). |
+| 1.0.1   | 2026-01-27 | Typos and instruction clarifications. |
+| 0.9.1   | 2025-12-19 | Beta release. |
 
 ---
 

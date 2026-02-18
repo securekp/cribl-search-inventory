@@ -6,7 +6,7 @@ This pack uses Cribl Search **HTTP API Dataset** providers for config data and t
 
 - **Worker groups** – List of groups/fleets from the Leader API
 - **Stream inventory** – Routes, pipelines, packs, inputs, outputs per worker group, using a variabilized `${worker_group}` URL
-- **Heavy Talkers for Edge** – One dashboard: Edge nodes by fleet with throughput metrics (in/out events and bytes), time picker, and Fleet dropdown
+- **Heavy Talkers for Edge** – One dashboard: line chart of top 10 nodes’ throughput over time (in/out events and bytes), table of top Edge nodes by fleet, time picker, and Fleet dropdown
 
 ## Deployment Overview
 
@@ -67,9 +67,9 @@ This dataset drives the **Worker Group / Fleet** dropdowns on the Stream Configu
 The pack adds the **Heavy Talkers for Edge** dashboard. It uses the **built-in cribl_metrics** dataset in Cribl Search (no HTTP API provider or dataset required).
 
 - **Time Range** – Picker controls the time window (`$time_range.earliest$` / `$time_range.latest$`).
-- **Fleet** – Dropdown lists Edge fleets from **cribl_metrics** (`worker_group` where `dist_mode==managed-edge`). Choose * for all fleets.
-
-The table shows top Edge nodes by outbound events. Throughput is aggregated from **cribl_metrics** rows: `total.in_bytes`, `total.out_bytes`, `total.in_events`, `total.out_events` per node (`instance`) and fleet (`worker_group`).
+- **Fleet** – Dropdown lists Edge fleets from **cribl_metrics** (`worker_group`). Choose * for all fleets.
+- **Line chart** – Throughput over time for the **top 10** Edge nodes (by outbound events): inbound events, outbound events, inbound bytes, and outbound bytes (5‑minute bins). Same fleet and time filters as the table.
+- **Table** – Top Edge nodes by outbound events. Throughput is aggregated from **cribl_metrics** rows: `total.in_bytes`, `total.out_bytes`, `total.in_events`, `total.out_events` per node (`instance`) and fleet (`worker_group`).
 
 ---
 
@@ -102,6 +102,7 @@ To show inputs/outputs/routes/pipelines for a **selected pack**:
 
 | Version | Date       | Changes |
 |---------|------------|--------|
+| 1.1.5   | 2026-02-17 | **Heavy Talkers for Edge**: added line chart – top 10 nodes’ throughput over time (inbound/outbound events and bytes in one chart). README updated. |
 | 1.1.4   | 2026-02-17 | **Heavy Talkers for Edge** now uses the **built-in cribl_metrics** dataset (no HTTP API provider/dataset). Fleet dropdown and table query cribl_metrics; in/out bytes and events per Edge node. Step 4 and cribl_worker_metrics removed from README. |
 | 1.1.3   | 2026-02-17 | **Heavy Talkers for Edge** only: renamed dashboard, removed Stream/Worker table and Worker Group dropdown; README and versioning updated. |
 | 1.1.2   | 2026-02-17 | Heavy Talkers: time picker; in/out column order; both tables use **cribl_worker_metrics** (Worker table filters by group; avoids 404 when `/m/{group}/workers` not available). |

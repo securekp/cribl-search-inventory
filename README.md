@@ -15,10 +15,10 @@ You will create **three dataset providers** and **three datasets** (plus one opt
 | Provider              | Dataset               | Purpose |
 |-----------------------|-----------------------|--------|
 | cribl_worker_groups   | cribl_worker_groups   | Groups/fleets list (drives dropdowns) |
-| cribl_stream_inventory| cribl_stream_inventory| Config + workers per `${worker_group}` (routes, pipelines, packs, inputs, outputs, **cribl_workers**) |
-| cribl_metrics        | cribl_worker_metrics  | All workers from Leader (`master/workers`) – used for **Edge** table in Heavy Talkers |
+| cribl_stream_inventory| cribl_stream_inventory| Config per `${worker_group}` (routes, pipelines, packs, inputs, outputs) |
+| cribl_metrics        | cribl_worker_metrics  | All workers from Leader (`master/workers`) – used for **both** Heavy Talkers tables (Edge by fleet, Worker by group) |
 
-Heavy Talkers does **not** mix providers: the **Edge** table uses **cribl_worker_metrics**; the **Worker** table uses **cribl_stream_inventory** (endpoint **cribl_workers**), so both use the correct data source and variables.
+Heavy Talkers uses **cribl_worker_metrics** for both tables: Edge filtered by fleet, Worker filtered by the selected worker group. The Leader `master/workers` endpoint is supported in all deployments; a per-group `GET /m/{group}/workers` is not available in all Cribl versions (can return 404).
 
 ---
 
@@ -59,11 +59,10 @@ This dataset drives the Fleet and Worker Group dropdowns. Ensure the API returns
 | cribl_packs   | items     | get    | https://&lt;workspace&gt;-&lt;org&gt;.cribl.cloud/api/v1/m/${worker_group}/packs |
 | cribl_inputs  | items     | get    | https://&lt;workspace&gt;-&lt;org&gt;.cribl.cloud/api/v1/m/${worker_group}/system/inputs?includePacks=true |
 | cribl_outputs | items     | get    | https://&lt;workspace&gt;-&lt;org&gt;.cribl.cloud/api/v1/m/${worker_group}/system/outputs?includePacks=true |
-| cribl_workers | items     | get    | https://&lt;workspace&gt;-&lt;org&gt;.cribl.cloud/api/v1/m/${worker_group}/workers |
 
-- **Data → Datasets** → create **cribl_stream_inventory**, provider **cribl_stream_inventory**, enable all six endpoints, add the pack’s **cribl_stream_inventory** datatype ruleset.
+- **Data → Datasets** → create **cribl_stream_inventory**, provider **cribl_stream_inventory**, enable all five endpoints (cribl_routes, cribl_pipelines, cribl_packs, cribl_inputs, cribl_outputs), add the pack’s **cribl_stream_inventory** datatype ruleset.
 
-The **cribl_workers** endpoint feeds the Heavy Talkers **Worker nodes** table. The search must use **dataset and worker_group** in the first part (e.g. `dataset='cribl_stream_inventory' worker_group=$worker_group`). **worker_group cannot be a wildcard** when querying the variabilized dataset—the dropdown must select a specific group (default is `default`). The Cribl API `GET /m/{worker_group}/workers` returns the **worker list (config/status)** only (id, group, info.hostname, lastMsgTime, status); it does **not** return throughput (`lastMetrics`). To get metrics for Stream workers, something must change on the **datasource provider side**—e.g. an endpoint that returns per-worker metrics (such as Cribl’s system metrics API) and is wired into the dataset. Until then, the Worker table shows nodes and last activity; in/out events and bytes columns stay empty for Stream.
+**Note:** Some Cribl versions expose `GET /api/v1/m/{worker_group}/workers`; if so, you can add a **cribl_workers** endpoint with that URL to the same provider. The Heavy Talkers **Worker nodes** table does **not** require it: it uses **cribl_worker_metrics** (Leader `master/workers`) and filters by `group==$worker_group`, so it works even when the per-group workers endpoint returns 404.
 
 ---
 
@@ -74,7 +73,7 @@ The **cribl_workers** endpoint feeds the Heavy Talkers **Worker nodes** table. T
 - OAuth: same as Step 1.
 - **Data → Datasets** → create **cribl_worker_metrics**, provider **cribl_metrics**, enable **cribl_worker_metrics**, add the pack’s **cribl_worker_metrics** datatype ruleset.
 
-This dataset is used **only for the Heavy Talkers Edge table**. The Leader `master/workers` response often includes **lastMetrics** (throughput) for Edge nodes only; Stream Worker metrics come from **cribl_stream_inventory** (cribl_workers), not from this provider.
+This dataset is used for **both** Heavy Talkers tables (Edge filtered by fleet, Worker filtered by worker group). The Leader `master/workers` response often includes **lastMetrics** (throughput) for Edge nodes only; Stream Worker rows may have config/status only.
 
 ---
 
@@ -84,7 +83,7 @@ The pack adds the **Heavy Talkers – Edge & Worker Nodes** dashboard.
 
 - **Time Range** – Picker controls the time window for all panels (`$time_range.earliest$` / `$time_range.latest$`).
 - **Fleet (Edge)** – Dropdown filters the Edge table by fleet (groups with `isFleet==true`). Data from **cribl_worker_metrics**.
-- **Worker Group (Stream)** – Dropdown filters the Worker table by worker group (`isFleet==false`). Data from **cribl_stream_inventory**, endpoint **cribl_workers**. The query uses `dataset='cribl_stream_inventory' worker_group=$worker_group` (same pattern as the other dashboards in this pack). You must select a **specific** group—wildcard is not supported for the variabilized dataset.
+- **Worker Group (Stream)** – Dropdown filters the Worker table by worker group (`isFleet==false`). Data from **cribl_worker_metrics** with filter `group==$worker_group` (same dataset as Edge table; filter by selected group).
 
 Tables show top nodes by outbound events (or by last activity when metrics are missing). Throughput columns use **lastMetrics** with bracket syntax in Search: `lastMetrics["total.in_events"]`, `lastMetrics["total.out_events"]`, `lastMetrics["total.in_bytes"]`, `lastMetrics["total.out_bytes"]`. The dashboard also accepts flat camelCase/snake_case if your API returns those.
 
@@ -119,7 +118,7 @@ To show inputs/outputs/routes/pipelines for a **selected pack**:
 
 | Version | Date       | Changes |
 |---------|------------|--------|
-| 1.1.2   | 2026-02-17 | Heavy Talkers: time picker; in/out column order; Worker table from **cribl_stream_inventory** (cribl_workers); README cleanup and no mixing dataset providers. |
+| 1.1.2   | 2026-02-17 | Heavy Talkers: time picker; in/out column order; both tables use **cribl_worker_metrics** (Worker table filters by group; avoids 404 when `/m/{group}/workers` not available). |
 | 1.1.1   | 2026-01-27 | Heavy Talkers: correct Search syntax for throughput metrics (`lastMetrics["total.*"]`). |
 | 1.0.1   | 2026-01-27 | Typos and instruction clarifications. |
 | 0.9.1   | 2025-12-19 | Beta release. |

@@ -68,7 +68,7 @@
       },
       "search": {
         "type": "inline",
-        "query": "${cribl_worker_metrics} (group==\"$fleet\" or \"$fleet\"==\"*\") | project _time, host=coalesce(info.hostname, id), in_events=coalesce(lastMetrics[\"total.in_events\"], inEvents, in_events) | summarize in_events=arg_max(_time, in_events) by bin(_time, 1h), host | sort by _time asc",
+        "query": "${cribl_worker_metrics} (group==\"$fleet\" or \"$fleet\"==\"*\") | project _time, host=coalesce(info.hostname, id), in_events=coalesce(lastMetrics[\"total.in_events\"], inEvents, in_events) | sort by _time asc",
         "earliest": "$time_range.earliest$",
         "latest": "$time_range.latest$",
         "timezone": "$time_range.timezone$",
@@ -87,7 +87,7 @@
       },
       "search": {
         "type": "inline",
-        "query": "${cribl_worker_metrics} (group==\"$fleet\" or \"$fleet\"==\"*\") | project _time, host=coalesce(info.hostname, id), out_events=coalesce(lastMetrics[\"total.out_events\"], outEvents, out_events) | summarize out_events=arg_max(_time, out_events) by bin(_time, 1h), host | sort by _time asc",
+        "query": "${cribl_worker_metrics} (group==\"$fleet\" or \"$fleet\"==\"*\") | project _time, host=coalesce(info.hostname, id), out_events=coalesce(lastMetrics[\"total.out_events\"], outEvents, out_events) | sort by _time asc",
         "earliest": "$time_range.earliest$",
         "latest": "$time_range.latest$",
         "timezone": "$time_range.timezone$",
@@ -106,7 +106,7 @@
       },
       "search": {
         "type": "inline",
-        "query": "${cribl_worker_metrics} (group==\"$fleet\" or \"$fleet\"==\"*\") | project _time, host=coalesce(info.hostname, id), in_bytes=coalesce(lastMetrics[\"total.in_bytes\"], inBytes, in_bytes) | summarize in_bytes=arg_max(_time, in_bytes) by bin(_time, 1h), host | sort by _time asc",
+        "query": "${cribl_worker_metrics} (group==\"$fleet\" or \"$fleet\"==\"*\") | project _time, host=coalesce(info.hostname, id), in_bytes=coalesce(lastMetrics[\"total.in_bytes\"], inBytes, in_bytes) | sort by _time asc",
         "earliest": "$time_range.earliest$",
         "latest": "$time_range.latest$",
         "timezone": "$time_range.timezone$",
@@ -125,7 +125,7 @@
       },
       "search": {
         "type": "inline",
-        "query": "${cribl_worker_metrics} (group==\"$fleet\" or \"$fleet\"==\"*\") | project _time, host=coalesce(info.hostname, id), out_bytes=coalesce(lastMetrics[\"total.out_bytes\"], outBytes, out_bytes) | summarize out_bytes=arg_max(_time, out_bytes) by bin(_time, 1h), host | sort by _time asc",
+        "query": "${cribl_worker_metrics} (group==\"$fleet\" or \"$fleet\"==\"*\") | project _time, host=coalesce(info.hostname, id), out_bytes=coalesce(lastMetrics[\"total.out_bytes\"], outBytes, out_bytes) | sort by _time asc",
         "earliest": "$time_range.earliest$",
         "latest": "$time_range.latest$",
         "timezone": "$time_range.timezone$",

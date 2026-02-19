@@ -1,6 +1,6 @@
 {
   "name": "Edge Node Statistics",
-  "description": "Top 10 Edge nodes by bytes in and by events in, filterable by Fleet.",
+  "description": "Fleet-wide KPIs, top-N bar charts, composition donuts, and top 10 tables by bytes/events, filterable by Fleet.",
   "created": 1769600000000,
   "modified": 1769600000000,
   "createdBy": "pack",
@@ -59,150 +59,231 @@
       }
     },
     {
-      "id": "ens-charts-markdown",
-      "type": "markdown.default",
-      "variant": "markdown",
+      "id": "ens-kpi-in-events",
+      "type": "chart.single",
+      "variant": "chart",
+      "title": "In events (total)",
       "config": {
-        "markdown": "# Metrics over time\n\nOne point per time a host reported; one line per host.",
-        "axis": {}
+        "axis": {
+          "y": {
+            "fields": [
+              "total"
+            ]
+          }
+        }
+      },
+      "search": {
+        "type": "inline",
+        "query": "${cribl_worker_metrics} (group==\"$fleet\" or \"$fleet\"==\"*\") | project in_events=coalesce(lastMetrics[\"total.in_events\"], inEvents, in_events) | summarize total=sum(in_events)",
+        "earliest": "$time_range.earliest$",
+        "latest": "$time_range.latest$"
       },
       "layout": {
         "x": 0,
         "y": 2,
-        "w": 12,
-        "h": 1
+        "w": 3,
+        "h": 2
       }
     },
     {
-      "id": "ens-chart-in-events",
-      "type": "chart.line",
+      "id": "ens-kpi-in-bytes",
+      "type": "chart.single",
       "variant": "chart",
-      "title": "In events (each report = one point)",
+      "title": "In bytes (total)",
       "config": {
         "axis": {
-          "x": {
-            "field": "_time",
-            "title": "Time"
-          },
           "y": {
             "fields": [
-              "in_events"
-            ],
-            "title": "In events"
+              "total"
+            ]
           }
-        },
-        "splitViewBy": "host"
+        }
       },
       "search": {
         "type": "inline",
-        "query": "${cribl_worker_metrics} (group==\"$fleet\" or \"$fleet\"==\"*\") | project _time, host=coalesce(info.hostname, id), in_events=coalesce(lastMetrics[\"total.in_events\"], inEvents, in_events) | sort by _time asc",
+        "query": "${cribl_worker_metrics} (group==\"$fleet\" or \"$fleet\"==\"*\") | project in_bytes=coalesce(lastMetrics[\"total.in_bytes\"], inBytes, in_bytes) | summarize total=sum(in_bytes)",
         "earliest": "$time_range.earliest$",
         "latest": "$time_range.latest$"
       },
       "layout": {
-        "x": 0,
-        "y": 3,
-        "w": 6,
-        "h": 4
+        "x": 3,
+        "y": 2,
+        "w": 3,
+        "h": 2
       }
     },
     {
-      "id": "ens-chart-out-events",
-      "type": "chart.line",
+      "id": "ens-kpi-out-events",
+      "type": "chart.single",
       "variant": "chart",
-      "title": "Out events (each report = one point)",
+      "title": "Out events (total)",
       "config": {
         "axis": {
-          "x": {
-            "field": "_time",
-            "title": "Time"
-          },
           "y": {
             "fields": [
-              "out_events"
-            ],
-            "title": "Out events"
+              "total"
+            ]
           }
-        },
-        "splitViewBy": "host"
+        }
       },
       "search": {
         "type": "inline",
-        "query": "${cribl_worker_metrics} (group==\"$fleet\" or \"$fleet\"==\"*\") | project _time, host=coalesce(info.hostname, id), out_events=coalesce(lastMetrics[\"total.out_events\"], outEvents, out_events) | sort by _time asc",
+        "query": "${cribl_worker_metrics} (group==\"$fleet\" or \"$fleet\"==\"*\") | project out_events=coalesce(lastMetrics[\"total.out_events\"], outEvents, out_events) | summarize total=sum(out_events)",
         "earliest": "$time_range.earliest$",
         "latest": "$time_range.latest$"
       },
       "layout": {
         "x": 6,
-        "y": 3,
-        "w": 6,
-        "h": 4
+        "y": 2,
+        "w": 3,
+        "h": 2
       }
     },
     {
-      "id": "ens-chart-in-bytes",
-      "type": "chart.line",
+      "id": "ens-kpi-out-bytes",
+      "type": "chart.single",
       "variant": "chart",
-      "title": "In bytes (each report = one point)",
+      "title": "Out bytes (total)",
+      "config": {
+        "axis": {
+          "y": {
+            "fields": [
+              "total"
+            ]
+          }
+        }
+      },
+      "search": {
+        "type": "inline",
+        "query": "${cribl_worker_metrics} (group==\"$fleet\" or \"$fleet\"==\"*\") | project out_bytes=coalesce(lastMetrics[\"total.out_bytes\"], outBytes, out_bytes) | summarize total=sum(out_bytes)",
+        "earliest": "$time_range.earliest$",
+        "latest": "$time_range.latest$"
+      },
+      "layout": {
+        "x": 9,
+        "y": 2,
+        "w": 3,
+        "h": 2
+      }
+    },
+    {
+      "id": "ens-bar-bytes",
+      "type": "chart.horizontalbar",
+      "variant": "chart",
+      "title": "Top 10 by bytes in",
       "config": {
         "axis": {
           "x": {
-            "field": "_time",
-            "title": "Time"
+            "field": "in_bytes",
+            "title": "In bytes"
+          },
+          "y": {
+            "field": "host",
+            "title": "Host"
+          }
+        }
+      },
+      "search": {
+        "type": "inline",
+        "query": "${cribl_worker_metrics} (group==\"$fleet\" or \"$fleet\"==\"*\") | sort by coalesce(lastMetrics[\"total.in_bytes\"], inBytes, in_bytes, 0) desc | take 10 | project host=coalesce(info.hostname, id), in_bytes=coalesce(lastMetrics[\"total.in_bytes\"], inBytes, in_bytes)",
+        "earliest": "$time_range.earliest$",
+        "latest": "$time_range.latest$"
+      },
+      "layout": {
+        "x": 0,
+        "y": 4,
+        "w": 6,
+        "h": 5
+      }
+    },
+    {
+      "id": "ens-bar-events",
+      "type": "chart.horizontalbar",
+      "variant": "chart",
+      "title": "Top 10 by events in",
+      "config": {
+        "axis": {
+          "x": {
+            "field": "in_events",
+            "title": "In events"
+          },
+          "y": {
+            "field": "host",
+            "title": "Host"
+          }
+        }
+      },
+      "search": {
+        "type": "inline",
+        "query": "${cribl_worker_metrics} (group==\"$fleet\" or \"$fleet\"==\"*\") | sort by coalesce(lastMetrics[\"total.in_events\"], inEvents, in_events, 0) desc | take 10 | project host=coalesce(info.hostname, id), in_events=coalesce(lastMetrics[\"total.in_events\"], inEvents, in_events)",
+        "earliest": "$time_range.earliest$",
+        "latest": "$time_range.latest$"
+      },
+      "layout": {
+        "x": 6,
+        "y": 4,
+        "w": 6,
+        "h": 5
+      }
+    },
+    {
+      "id": "ens-donut-bytes",
+      "type": "chart.donut",
+      "variant": "chart",
+      "title": "Share of in bytes by host",
+      "config": {
+        "axis": {
+          "x": {
+            "field": "host"
           },
           "y": {
             "fields": [
               "in_bytes"
-            ],
-            "title": "In bytes"
+            ]
           }
-        },
-        "splitViewBy": "host"
+        }
       },
       "search": {
         "type": "inline",
-        "query": "${cribl_worker_metrics} (group==\"$fleet\" or \"$fleet\"==\"*\") | project _time, host=coalesce(info.hostname, id), in_bytes=coalesce(lastMetrics[\"total.in_bytes\"], inBytes, in_bytes) | sort by _time asc",
+        "query": "${cribl_worker_metrics} (group==\"$fleet\" or \"$fleet\"==\"*\") | project host=coalesce(info.hostname, id), in_bytes=coalesce(lastMetrics[\"total.in_bytes\"], inBytes, in_bytes)",
         "earliest": "$time_range.earliest$",
         "latest": "$time_range.latest$"
       },
       "layout": {
         "x": 0,
-        "y": 7,
+        "y": 9,
         "w": 6,
-        "h": 4
+        "h": 5
       }
     },
     {
-      "id": "ens-chart-out-bytes",
-      "type": "chart.line",
+      "id": "ens-donut-events",
+      "type": "chart.donut",
       "variant": "chart",
-      "title": "Out bytes (each report = one point)",
+      "title": "Share of in events by host",
       "config": {
         "axis": {
           "x": {
-            "field": "_time",
-            "title": "Time"
+            "field": "host"
           },
           "y": {
             "fields": [
-              "out_bytes"
-            ],
-            "title": "Out bytes"
+              "in_events"
+            ]
           }
-        },
-        "splitViewBy": "host"
+        }
       },
       "search": {
         "type": "inline",
-        "query": "${cribl_worker_metrics} (group==\"$fleet\" or \"$fleet\"==\"*\") | project _time, host=coalesce(info.hostname, id), out_bytes=coalesce(lastMetrics[\"total.out_bytes\"], outBytes, out_bytes) | sort by _time asc",
+        "query": "${cribl_worker_metrics} (group==\"$fleet\" or \"$fleet\"==\"*\") | project host=coalesce(info.hostname, id), in_events=coalesce(lastMetrics[\"total.in_events\"], inEvents, in_events)",
         "earliest": "$time_range.earliest$",
         "latest": "$time_range.latest$"
       },
       "layout": {
         "x": 6,
-        "y": 7,
+        "y": 9,
         "w": 6,
-        "h": 4
+        "h": 5
       }
     },
     {
@@ -218,7 +299,7 @@
       },
       "layout": {
         "x": 0,
-        "y": 11,
+        "y": 14,
         "w": 12,
         "h": 6
       }
@@ -236,7 +317,7 @@
       },
       "layout": {
         "x": 0,
-        "y": 17,
+        "y": 20,
         "w": 12,
         "h": 6
       }

@@ -16,7 +16,7 @@
   "groups": {},
   "elements": [
     {
-      "id": "ens-time-range",
+      "id": "ens_time_range",
       "type": "input.timerange",
       "variant": "input",
       "title": "Time Range",
@@ -36,7 +36,7 @@
       }
     },
     {
-      "id": "ens-fleet-dropdown",
+      "id": "ens_fleet_dropdown",
       "type": "input.dropdown",
       "variant": "input",
       "title": "Fleet",
@@ -59,8 +59,8 @@
       }
     },
     {
-      "id": "ens-kpi-in-events",
-      "type": "chart.single",
+      "id": "ens_kpi_in_events",
+      "type": "counter.single",
       "variant": "chart",
       "title": "In events (total)",
       "config": {
@@ -86,8 +86,8 @@
       }
     },
     {
-      "id": "ens-kpi-in-bytes",
-      "type": "chart.single",
+      "id": "ens_kpi_in_bytes",
+      "type": "counter.single",
       "variant": "chart",
       "title": "In bytes (total)",
       "config": {
@@ -113,8 +113,8 @@
       }
     },
     {
-      "id": "ens-kpi-out-events",
-      "type": "chart.single",
+      "id": "ens_kpi_out_events",
+      "type": "counter.single",
       "variant": "chart",
       "title": "Out events (total)",
       "config": {
@@ -140,8 +140,8 @@
       }
     },
     {
-      "id": "ens-kpi-out-bytes",
-      "type": "chart.single",
+      "id": "ens_kpi_out_bytes",
+      "type": "counter.single",
       "variant": "chart",
       "title": "Out bytes (total)",
       "config": {
@@ -167,8 +167,8 @@
       }
     },
     {
-      "id": "ens-bar-bytes",
-      "type": "chart.horizontalbar",
+      "id": "ens_bar_bytes",
+      "type": "chart.horizontalBar",
       "variant": "chart",
       "title": "Top 10 by bytes in",
       "config": {
@@ -197,8 +197,8 @@
       }
     },
     {
-      "id": "ens-bar-events",
-      "type": "chart.horizontalbar",
+      "id": "ens_bar_events",
+      "type": "chart.horizontalBar",
       "variant": "chart",
       "title": "Top 10 by events in",
       "config": {
@@ -227,8 +227,8 @@
       }
     },
     {
-      "id": "ens-donut-bytes",
-      "type": "chart.donut",
+      "id": "ens_pie_bytes",
+      "type": "chart.pie",
       "variant": "chart",
       "title": "Share of in bytes by host",
       "config": {
@@ -257,8 +257,8 @@
       }
     },
     {
-      "id": "ens-donut-events",
-      "type": "chart.donut",
+      "id": "ens_pie_events",
+      "type": "chart.pie",
       "variant": "chart",
       "title": "Share of in events by host",
       "config": {
@@ -287,7 +287,7 @@
       }
     },
     {
-      "id": "ens-top10-table",
+      "id": "ens_top10_table",
       "type": "list.table",
       "title": "Top 10 Edge nodes by bytes in",
       "config": {},
@@ -305,7 +305,7 @@
       }
     },
     {
-      "id": "ens-top10-events-table",
+      "id": "ens_top10_events_table",
       "type": "list.table",
       "title": "Top 10 Edge nodes by events in",
       "config": {},

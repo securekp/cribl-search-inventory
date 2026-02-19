@@ -79,6 +79,7 @@ The pack adds the **Edge Node Statistics** dashboard. Data comes from **cribl_wo
 
 - **Time Range** – Picker sets the time window for dataset refresh.
 - **Fleet** – Dropdown filters by Edge fleet (from cribl_worker_groups, `isFleet==true`). Choose * for all fleets.
+- **Data Activity** – Four line charts (Events In, Events Out, Bytes In, Bytes Out over time), one line per host (`info.hostname`). When the dataset is refreshed over the time range, charts show trends per node.
 - **Table** – Top 10 Edge nodes by bytes in; also shows bytes out and last message time. When bytes in/out are not available, sorting uses lastMsgTime.
 
 ---

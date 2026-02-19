@@ -1,6 +1,6 @@
 {
   "name": "Edge Node Statistics",
-  "description": "Top 10 Edge nodes by bytes in; shows bytes out and last message time.",
+  "description": "Data Activity (events/bytes in and out over time per host) and top 10 Edge nodes by bytes in.",
   "created": 1769600000000,
   "modified": 1769600000000,
   "createdBy": "pack",
@@ -48,6 +48,92 @@
       "layout": { "x": 2, "y": 0, "w": 2, "h": 2 }
     },
     {
+      "id": "ens-markdown",
+      "type": "markdown.default",
+      "variant": "markdown",
+      "config": {
+        "markdown": "# Data Activity\n\nEvents and bytes in/out over time, one line per host. Table below shows top 10 Edge nodes by bytes in.",
+        "axis": {}
+      },
+      "layout": { "x": 0, "y": 2, "w": 12, "h": 1 }
+    },
+    {
+      "id": "ens-chart-in-events",
+      "type": "chart.line",
+      "variant": "chart",
+      "title": "Events In over time",
+      "config": {
+        "axis": { "x": { "field": "_time", "title": "Time" }, "y": { "fields": ["in_events"], "title": "Events In" } },
+        "splitBy": "host"
+      },
+      "search": {
+        "type": "inline",
+        "query": "${cribl_worker_metrics} (group==\"$fleet\" or \"$fleet\"==\"*\") | project _time, host=coalesce(info.hostname, id), in_events=coalesce(lastMetrics[\"total.in_events\"], inEvents, in_events) | summarize in_events=last(in_events) by bin(_time, 1h), host | sort by _time asc",
+        "earliest": "$time_range.earliest$",
+        "latest": "$time_range.latest$",
+        "timezone": "$time_range.timezone$",
+        "timeRangeInputId": "time_range"
+      },
+      "layout": { "x": 0, "y": 3, "w": 6, "h": 4 }
+    },
+    {
+      "id": "ens-chart-out-events",
+      "type": "chart.line",
+      "variant": "chart",
+      "title": "Events Out over time",
+      "config": {
+        "axis": { "x": { "field": "_time", "title": "Time" }, "y": { "fields": ["out_events"], "title": "Events Out" } },
+        "splitBy": "host"
+      },
+      "search": {
+        "type": "inline",
+        "query": "${cribl_worker_metrics} (group==\"$fleet\" or \"$fleet\"==\"*\") | project _time, host=coalesce(info.hostname, id), out_events=coalesce(lastMetrics[\"total.out_events\"], outEvents, out_events) | summarize out_events=last(out_events) by bin(_time, 1h), host | sort by _time asc",
+        "earliest": "$time_range.earliest$",
+        "latest": "$time_range.latest$",
+        "timezone": "$time_range.timezone$",
+        "timeRangeInputId": "time_range"
+      },
+      "layout": { "x": 6, "y": 3, "w": 6, "h": 4 }
+    },
+    {
+      "id": "ens-chart-in-bytes",
+      "type": "chart.line",
+      "variant": "chart",
+      "title": "Bytes In over time",
+      "config": {
+        "axis": { "x": { "field": "_time", "title": "Time" }, "y": { "fields": ["in_bytes"], "title": "Bytes In" } },
+        "splitBy": "host"
+      },
+      "search": {
+        "type": "inline",
+        "query": "${cribl_worker_metrics} (group==\"$fleet\" or \"$fleet\"==\"*\") | project _time, host=coalesce(info.hostname, id), in_bytes=coalesce(lastMetrics[\"total.in_bytes\"], inBytes, in_bytes) | summarize in_bytes=last(in_bytes) by bin(_time, 1h), host | sort by _time asc",
+        "earliest": "$time_range.earliest$",
+        "latest": "$time_range.latest$",
+        "timezone": "$time_range.timezone$",
+        "timeRangeInputId": "time_range"
+      },
+      "layout": { "x": 0, "y": 7, "w": 6, "h": 4 }
+    },
+    {
+      "id": "ens-chart-out-bytes",
+      "type": "chart.line",
+      "variant": "chart",
+      "title": "Bytes Out over time",
+      "config": {
+        "axis": { "x": { "field": "_time", "title": "Time" }, "y": { "fields": ["out_bytes"], "title": "Bytes Out" } },
+        "splitBy": "host"
+      },
+      "search": {
+        "type": "inline",
+        "query": "${cribl_worker_metrics} (group==\"$fleet\" or \"$fleet\"==\"*\") | project _time, host=coalesce(info.hostname, id), out_bytes=coalesce(lastMetrics[\"total.out_bytes\"], outBytes, out_bytes) | summarize out_bytes=last(out_bytes) by bin(_time, 1h), host | sort by _time asc",
+        "earliest": "$time_range.earliest$",
+        "latest": "$time_range.latest$",
+        "timezone": "$time_range.timezone$",
+        "timeRangeInputId": "time_range"
+      },
+      "layout": { "x": 6, "y": 7, "w": 6, "h": 4 }
+    },
+    {
       "id": "ens-top10-table",
       "type": "list.table",
       "title": "Top 10 Edge nodes by bytes in",
@@ -60,7 +146,7 @@
         "timezone": "$time_range.timezone$",
         "timeRangeInputId": "time_range"
       },
-      "layout": { "x": 0, "y": 2, "w": 12, "h": 6 }
+      "layout": { "x": 0, "y": 11, "w": 12, "h": 6 }
     }
   ]
 }

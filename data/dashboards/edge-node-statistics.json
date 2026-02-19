@@ -62,7 +62,7 @@
       "title": "Events In over time",
       "config": {
         "axis": { "x": { "field": "_time", "title": "Time" }, "y": { "fields": ["in_events"], "title": "Events In" } },
-        "splitBy": "host"
+        "splitViewBy": "host"
       },
       "search": {
         "type": "inline",
@@ -79,7 +79,7 @@
       "title": "Events Out over time",
       "config": {
         "axis": { "x": { "field": "_time", "title": "Time" }, "y": { "fields": ["out_events"], "title": "Events Out" } },
-        "splitBy": "host"
+        "splitViewBy": "host"
       },
       "search": {
         "type": "inline",
@@ -96,7 +96,7 @@
       "title": "Bytes In over time",
       "config": {
         "axis": { "x": { "field": "_time", "title": "Time" }, "y": { "fields": ["in_bytes"], "title": "Bytes In" } },
-        "splitBy": "host"
+        "splitViewBy": "host"
       },
       "search": {
         "type": "inline",
@@ -113,7 +113,7 @@
       "title": "Bytes Out over time",
       "config": {
         "axis": { "x": { "field": "_time", "title": "Time" }, "y": { "fields": ["out_bytes"], "title": "Bytes Out" } },
-        "splitBy": "host"
+        "splitViewBy": "host"
       },
       "search": {
         "type": "inline",

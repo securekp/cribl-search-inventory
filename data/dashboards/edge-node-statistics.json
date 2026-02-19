@@ -41,9 +41,7 @@
         "type": "inline",
         "query": "${cribl_worker_groups} isFleet==true | summarize by id",
         "earliest": "$time_range.earliest$",
-        "latest": "$time_range.latest$",
-        "timezone": "$time_range.timezone$",
-        "timeRangeInputId": "time_range"
+        "latest": "$time_range.latest$"
       },
       "layout": { "x": 2, "y": 0, "w": 2, "h": 2 }
     },
@@ -70,9 +68,7 @@
         "type": "inline",
         "query": "${cribl_worker_metrics} (group==\"$fleet\" or \"$fleet\"==\"*\") | project _time, host=coalesce(info.hostname, id), in_events=coalesce(lastMetrics[\"total.in_events\"], inEvents, in_events) | sort by _time asc",
         "earliest": "$time_range.earliest$",
-        "latest": "$time_range.latest$",
-        "timezone": "$time_range.timezone$",
-        "timeRangeInputId": "time_range"
+        "latest": "$time_range.latest$"
       },
       "layout": { "x": 0, "y": 3, "w": 6, "h": 4 }
     },
@@ -89,9 +85,7 @@
         "type": "inline",
         "query": "${cribl_worker_metrics} (group==\"$fleet\" or \"$fleet\"==\"*\") | project _time, host=coalesce(info.hostname, id), out_events=coalesce(lastMetrics[\"total.out_events\"], outEvents, out_events) | sort by _time asc",
         "earliest": "$time_range.earliest$",
-        "latest": "$time_range.latest$",
-        "timezone": "$time_range.timezone$",
-        "timeRangeInputId": "time_range"
+        "latest": "$time_range.latest$"
       },
       "layout": { "x": 6, "y": 3, "w": 6, "h": 4 }
     },
@@ -108,9 +102,7 @@
         "type": "inline",
         "query": "${cribl_worker_metrics} (group==\"$fleet\" or \"$fleet\"==\"*\") | project _time, host=coalesce(info.hostname, id), in_bytes=coalesce(lastMetrics[\"total.in_bytes\"], inBytes, in_bytes) | sort by _time asc",
         "earliest": "$time_range.earliest$",
-        "latest": "$time_range.latest$",
-        "timezone": "$time_range.timezone$",
-        "timeRangeInputId": "time_range"
+        "latest": "$time_range.latest$"
       },
       "layout": { "x": 0, "y": 7, "w": 6, "h": 4 }
     },
@@ -127,9 +119,7 @@
         "type": "inline",
         "query": "${cribl_worker_metrics} (group==\"$fleet\" or \"$fleet\"==\"*\") | project _time, host=coalesce(info.hostname, id), out_bytes=coalesce(lastMetrics[\"total.out_bytes\"], outBytes, out_bytes) | sort by _time asc",
         "earliest": "$time_range.earliest$",
-        "latest": "$time_range.latest$",
-        "timezone": "$time_range.timezone$",
-        "timeRangeInputId": "time_range"
+        "latest": "$time_range.latest$"
       },
       "layout": { "x": 6, "y": 7, "w": 6, "h": 4 }
     },
@@ -142,9 +132,7 @@
         "type": "inline",
         "query": "${cribl_worker_metrics} (group==\"$fleet\" or \"$fleet\"==\"*\") | sort by coalesce(lastMetrics[\"total.in_bytes\"], inBytes, in_bytes, 0) desc, lastMsgTime desc | take 10 | project host=coalesce(info.hostname, id), id, in_bytes=coalesce(lastMetrics[\"total.in_bytes\"], inBytes, in_bytes), out_bytes=coalesce(lastMetrics[\"total.out_bytes\"], outBytes, out_bytes), lastMsgTime",
         "earliest": "$time_range.earliest$",
-        "latest": "$time_range.latest$",
-        "timezone": "$time_range.timezone$",
-        "timeRangeInputId": "time_range"
+        "latest": "$time_range.latest$"
       },
       "layout": { "x": 0, "y": 11, "w": 12, "h": 6 }
     }

@@ -1,12 +1,12 @@
 # Cribl Inventory
 
-This pack uses Cribl Search **HTTP API Dataset** providers to pull data from the Cribl Stream/Edge API. It gives you a single place to see worker groups, routes, pipelines, packs, inputs, outputs, and an **Edge Node Statistics** dashboard (top 10 Edge nodes by bytes in/out, filterable by Fleet).
+This pack uses Cribl Search **HTTP API Dataset** providers to pull data from the Cribl Stream/Edge API. It gives you a single place to see worker groups, routes, pipelines, packs, inputs, outputs, and an **Edge Node Statistics** dashboard (top 10 by bytes in and by events in, filterable by Fleet).
 
 ## What You Get
 
 - **Worker groups** – List of groups/fleets from the Leader API
 - **Stream inventory** – Routes, pipelines, packs, inputs, outputs per worker group, using a variabilized `${worker_group}` URL
-- **Edge Node Statistics** – Dashboard: Fleet filter, top 10 Edge nodes by bytes in (bytes out and last message time shown); from **cribl_worker_metrics** (Leader `master/workers` API)
+- **Edge Node Statistics** – Dashboard: Fleet filter, two tables—top 10 by bytes in and top 10 by events in; from **cribl_worker_metrics** (Leader `master/workers` API)
 
 ## Deployment Overview
 
@@ -16,7 +16,7 @@ You will create **three dataset providers** and **three datasets** (plus one opt
 |------------------------|------------------------|--------|
 | cribl_worker_groups    | cribl_worker_groups    | Groups/fleets list (Fleet dropdown in Edge Node Statistics; Stream Configuration, Pack Information) |
 | cribl_stream_inventory | cribl_stream_inventory | Config per `${worker_group}` (routes, pipelines, packs, inputs, outputs) |
-| cribl_metrics          | cribl_worker_metrics   | Leader `master/workers` – **Edge Node Statistics** (top 10 Edge nodes by bytes in, bytes out, lastMsgTime) |
+| cribl_metrics          | cribl_worker_metrics   | Leader `master/workers` – **Edge Node Statistics** (top 10 by bytes in, top 10 by events in) |
 
 ---
 
@@ -79,8 +79,7 @@ The pack adds the **Edge Node Statistics** dashboard. Data comes from **cribl_wo
 
 - **Time Range** – Picker sets the time window for dataset refresh.
 - **Fleet** – Dropdown filters by Edge fleet (from cribl_worker_groups, `isFleet==true`). Choose * for all fleets.
-- **Data Activity** – Four line charts (Events In, Events Out, Bytes In, Bytes Out over time), one line per host (`info.hostname`). When the dataset is refreshed over the time range, charts show trends per node.
-- **Table** – Top 10 Edge nodes by bytes in; also shows bytes out and last message time. When bytes in/out are not available, sorting uses lastMsgTime.
+- **Tables** – Top 10 Edge nodes by bytes in (host, id, in_bytes, out_bytes, lastMsgTime) and top 10 by events in (host, id, in_events, out_events, lastMsgTime). When metrics are not available, sorting uses lastMsgTime.
 
 ---
 
@@ -111,8 +110,9 @@ To show inputs/outputs/routes/pipelines for a **selected pack**:
 
 | Version | Date       | Changes |
 |---------|------------|--------|
-| 1.1.2   | 2026-02-17 | Heavy Talkers: time picker; in/out column order; both tables use **cribl_worker_metrics** (Worker table filters by group; avoids 404 when `/m/{group}/workers` not available). |
-| 1.1.1   | 2026-01-27 | Heavy Talkers: correct Search syntax for throughput metrics (`lastMetrics["total.*"]`). |
+| 1.1.6   | 2026-02-17 | Edge Node Statistics: two tables only (top 10 by bytes in, top 10 by events in); Time Range and Fleet filter; removed Data Activity / line charts. |
+| 1.1.2   | 2026-02-17 | Edge Node Statistics: time picker; both tables use **cribl_worker_metrics**. |
+| 1.1.1   | 2026-01-27 | Correct Search syntax for throughput metrics (`lastMetrics["total.*"]`). |
 | 1.0.1   | 2026-01-27 | Typos and instruction clarifications. |
 | 0.9.1   | 2025-12-19 | Beta release. |
 

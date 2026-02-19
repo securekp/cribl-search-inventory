@@ -1,6 +1,6 @@
 {
   "name": "cribl-search-inventory",
-  "version": "1.1.7",
+  "version": "1.1.8",
   "author": "Kelsey Prior - Cribl",
   "description": "This pack helps display worker groups, routes, pipelines, packs, and Edge Node Statistics (top 10 by bytes in and by events in) in one location",
   "displayName": "Cribl Search Inventory",

@@ -1,12 +1,12 @@
 # Cribl Inventory
 
-This pack uses Cribl Search **HTTP API Dataset** providers to pull data from the Cribl Stream/Edge API. It gives you a single place to see worker groups, routes, pipelines, packs, inputs, outputs, and an **Edge Node Statistics** dashboard (top 10 by bytes in and by events in, filterable by Fleet).
+This pack uses Cribl Search **HTTP API Dataset** providers to pull data from the Cribl Stream/Edge API. It gives you a single place to see worker groups, routes, pipelines, packs, inputs, outputs, and an **Edge Node Statistics** dashboard (fleet-wide KPIs, bar charts, composition donuts, and top 10 tables, filterable by Fleet).
 
 ## What You Get
 
 - **Worker groups** – List of groups/fleets from the Leader API
 - **Stream inventory** – Routes, pipelines, packs, inputs, outputs per worker group, using a variabilized `${worker_group}` URL
-- **Edge Node Statistics** – Dashboard: Fleet filter; line charts (in/out events and bytes, one point per report per host); two tables—top 10 by bytes in and top 10 by events in; from **cribl_worker_metrics** (Leader `master/workers` API)
+- **Edge Node Statistics** – Dashboard: Fleet filter; fleet-wide KPI cards (in/out events, in/out bytes); top-10 horizontal bar charts; composition donuts (share of in bytes / in events by host); two tables—top 10 by bytes in and top 10 by events in; from **cribl_worker_metrics** (Leader `master/workers` API)
 
 ## Deployment Overview
 
@@ -16,7 +16,7 @@ You will create **three dataset providers** and **three datasets** (plus one opt
 |------------------------|------------------------|--------|
 | cribl_worker_groups    | cribl_worker_groups    | Groups/fleets list (Fleet dropdown in Edge Node Statistics; Stream Configuration, Pack Information) |
 | cribl_stream_inventory | cribl_stream_inventory | Config per `${worker_group}` (routes, pipelines, packs, inputs, outputs) |
-| cribl_metrics          | cribl_worker_metrics   | Leader `master/workers` – **Edge Node Statistics** (metrics-over-time line charts, top 10 by bytes in, top 10 by events in) |
+| cribl_metrics          | cribl_worker_metrics   | Leader `master/workers` – **Edge Node Statistics** (KPIs, bar charts, donuts, top 10 by bytes/events) |
 
 ---
 
@@ -78,8 +78,10 @@ The Leader `master/workers` API returns workers from all groups (Stream worker g
 The pack adds the **Edge Node Statistics** dashboard. Data comes from **cribl_worker_metrics** (Leader `master/workers` API).
 
 - **Time Range** – Picker sets the time window for dataset refresh.
-- **Metrics over time** – Four line charts (In events, Out events, In bytes, Out bytes). Each point is one time a host reported; one line per host. No aggregation (e.g. 10 reports in a day → 10 points for that host).
 - **Fleet** – Dropdown filters by Edge fleet (from cribl_worker_groups, `isFleet==true`). Choose * for all fleets.
+- **Fleet-wide KPIs** – Four single-value cards: total In events, In bytes, Out events, Out bytes across the selected fleet.
+- **Bar charts** – Top 10 Edge nodes by bytes in and by events in (horizontal bars).
+- **Composition donuts** – Share of in bytes by host and share of in events by host.
 - **Tables** – Top 10 Edge nodes by bytes in (host, id, in_bytes, out_bytes, lastMsgTime) and top 10 by events in (host, id, in_events, out_events, lastMsgTime). When metrics are not available, sorting uses lastMsgTime.
 
 ---
@@ -111,6 +113,7 @@ To show inputs/outputs/routes/pipelines for a **selected pack**:
 
 | Version | Date       | Changes |
 |---------|------------|--------|
+| 1.1.8   | 2026-02-17 | Edge Node Statistics: fleet-wide KPIs (in/out events, in/out bytes), top-10 bar charts, composition donuts (share by host); removed line charts (data is just-in-time API snapshot). |
 | 1.1.7   | 2026-02-17 | Edge Node Statistics: added metrics-over-time line charts (one point per report, one line per host; in/out events and bytes). |
 | 1.1.6   | 2026-02-17 | Edge Node Statistics: two tables only (top 10 by bytes in, top 10 by events in); Time Range and Fleet filter; removed Data Activity / line charts. |
 | 1.1.2   | 2026-02-17 | Edge Node Statistics: time picker; both tables use **cribl_worker_metrics**. |

@@ -62,17 +62,6 @@ This dataset drives the **Fleet** dropdown on the Edge Node Statistics dashboard
 
 ---
 
-## Step 4: Provider and Dataset – Metrics (Edge Node Statistics)
-
-- **Data → Dataset providers** → **Generic HTTP API** named **cribl_metrics**.
-- **Endpoint**: name `cribl_worker_metrics`, datafield `items`, method get, url `https://<workspace>-<org>.cribl.cloud/api/v1/master/workers`
-- OAuth: use the settings from Step 1.
-- **Data → Datasets** → create **cribl_worker_metrics**, provider **cribl_metrics**, enable **cribl_worker_metrics**, add the pack’s **cribl_worker_metrics** datatype ruleset.
-
-The Leader `master/workers` API returns workers from all groups (Stream worker groups and Edge fleets). The dashboard expects fields such as `group`, `id`, `info.hostname`, `lastMsgTime`, `status`. Throughput uses **lastMetrics** with bracket syntax: `lastMetrics["total.in_events"]`, `lastMetrics["total.out_events"]`, `lastMetrics["total.in_bytes"]`, `lastMetrics["total.out_bytes"]`, and falls back to flat camelCase/snake_case if your API returns those. If your API uses a different array key than `items` (e.g. `workers`), set **datafield** accordingly.
-
----
-
 ## Optional: Pack Details Dashboard
 
 To show inputs/outputs/routes/pipelines for a **selected pack**:
@@ -87,6 +76,17 @@ To show inputs/outputs/routes/pipelines for a **selected pack**:
 | cribl_packs_pipelines| items    | get    | https://&lt;workspace&gt;-&lt;org&gt;.cribl.cloud/api/v1/m/${worker_group}/p/${pack}/pipelines |
 
 - Create dataset **cribl_packs** with provider **cribl_packs**, enable those endpoints, add the pack’s **cribl_packs** ruleset. Update the **cribl_packs** macro if you change the dataset name.
+
+---
+
+## Optional: Provider and Dataset – Metrics (Edge Node Statistics)
+
+- **Data → Dataset providers** → **Generic HTTP API** named **cribl_metrics**.
+- **Endpoint**: name `cribl_worker_metrics`, datafield `items`, method get, url `https://<workspace>-<org>.cribl.cloud/api/v1/master/workers`
+- OAuth: use the settings from Step 1.
+- **Data → Datasets** → create **cribl_worker_metrics**, provider **cribl_metrics**, enable **cribl_worker_metrics**, add the pack’s **cribl_worker_metrics** datatype ruleset.
+
+The Leader `master/workers` API returns workers from all groups (Stream worker groups and Edge fleets). The dashboard expects fields such as `group`, `id`, `info.hostname`, `lastMsgTime`, `status`. Throughput uses **lastMetrics** with bracket syntax: `lastMetrics["total.in_events"]`, `lastMetrics["total.out_events"]`, `lastMetrics["total.in_bytes"]`, `lastMetrics["total.out_bytes"]`, and falls back to flat camelCase/snake_case if your API returns those. If your API uses a different array key than `items` (e.g. `workers`), set **datafield** accordingly.
 
 ---
 

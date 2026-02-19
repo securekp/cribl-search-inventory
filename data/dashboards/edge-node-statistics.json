@@ -50,7 +50,7 @@
       "type": "markdown.default",
       "variant": "markdown",
       "config": {
-        "markdown": "# Data Activity\n\nEvents and bytes in/out over time, one line per host. Table below shows top 10 Edge nodes by bytes in.",
+        "markdown": "# Data Activity\n\nEvents and bytes in/out over time, one line per host. Tables below show top 10 Edge nodes by bytes in and by events in.",
         "axis": {}
       },
       "layout": { "x": 0, "y": 2, "w": 12, "h": 1 }
@@ -66,7 +66,7 @@
       },
       "search": {
         "type": "inline",
-        "query": "${cribl_worker_metrics} (group==\"$fleet\" or \"$fleet\"==\"*\") | project _time, host=coalesce(info.hostname, id), in_events=coalesce(lastMetrics[\"total.in_events\"], inEvents, in_events) | sort by _time asc",
+        "query": "${cribl_worker_metrics} (group==\"$fleet\" or \"$fleet\"==\"*\") | project _time, host=coalesce(info.hostname, id), in_events=coalesce(lastMetrics[\"total.in_events\"], inEvents, in_events) | summarize in_events=max(in_events) by bin(_time, 1h), host | sort by _time asc",
         "earliest": "$time_range.earliest$",
         "latest": "$time_range.latest$"
       },
@@ -83,7 +83,7 @@
       },
       "search": {
         "type": "inline",
-        "query": "${cribl_worker_metrics} (group==\"$fleet\" or \"$fleet\"==\"*\") | project _time, host=coalesce(info.hostname, id), out_events=coalesce(lastMetrics[\"total.out_events\"], outEvents, out_events) | sort by _time asc",
+        "query": "${cribl_worker_metrics} (group==\"$fleet\" or \"$fleet\"==\"*\") | project _time, host=coalesce(info.hostname, id), out_events=coalesce(lastMetrics[\"total.out_events\"], outEvents, out_events) | summarize out_events=max(out_events) by bin(_time, 1h), host | sort by _time asc",
         "earliest": "$time_range.earliest$",
         "latest": "$time_range.latest$"
       },
@@ -100,7 +100,7 @@
       },
       "search": {
         "type": "inline",
-        "query": "${cribl_worker_metrics} (group==\"$fleet\" or \"$fleet\"==\"*\") | project _time, host=coalesce(info.hostname, id), in_bytes=coalesce(lastMetrics[\"total.in_bytes\"], inBytes, in_bytes) | sort by _time asc",
+        "query": "${cribl_worker_metrics} (group==\"$fleet\" or \"$fleet\"==\"*\") | project _time, host=coalesce(info.hostname, id), in_bytes=coalesce(lastMetrics[\"total.in_bytes\"], inBytes, in_bytes) | summarize in_bytes=max(in_bytes) by bin(_time, 1h), host | sort by _time asc",
         "earliest": "$time_range.earliest$",
         "latest": "$time_range.latest$"
       },
@@ -117,7 +117,7 @@
       },
       "search": {
         "type": "inline",
-        "query": "${cribl_worker_metrics} (group==\"$fleet\" or \"$fleet\"==\"*\") | project _time, host=coalesce(info.hostname, id), out_bytes=coalesce(lastMetrics[\"total.out_bytes\"], outBytes, out_bytes) | sort by _time asc",
+        "query": "${cribl_worker_metrics} (group==\"$fleet\" or \"$fleet\"==\"*\") | project _time, host=coalesce(info.hostname, id), out_bytes=coalesce(lastMetrics[\"total.out_bytes\"], outBytes, out_bytes) | summarize out_bytes=max(out_bytes) by bin(_time, 1h), host | sort by _time asc",
         "earliest": "$time_range.earliest$",
         "latest": "$time_range.latest$"
       },
@@ -135,6 +135,19 @@
         "latest": "$time_range.latest$"
       },
       "layout": { "x": 0, "y": 11, "w": 12, "h": 6 }
+    },
+    {
+      "id": "ens-top10-events-table",
+      "type": "list.table",
+      "title": "Top 10 Edge nodes by events in",
+      "config": {},
+      "search": {
+        "type": "inline",
+        "query": "${cribl_worker_metrics} (group==\"$fleet\" or \"$fleet\"==\"*\") | sort by coalesce(lastMetrics[\"total.in_events\"], inEvents, in_events, 0) desc, lastMsgTime desc | take 10 | project host=coalesce(info.hostname, id), id, in_events=coalesce(lastMetrics[\"total.in_events\"], inEvents, in_events), out_events=coalesce(lastMetrics[\"total.out_events\"], outEvents, out_events), lastMsgTime",
+        "earliest": "$time_range.earliest$",
+        "latest": "$time_range.latest$"
+      },
+      "layout": { "x": 0, "y": 17, "w": 12, "h": 6 }
     }
   ]
 }

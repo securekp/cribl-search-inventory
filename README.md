@@ -73,6 +73,23 @@ The Leader `master/workers` API returns workers from all groups (Stream worker g
 
 ---
 
+## Optional: Pack Details Dashboard
+
+To show inputs/outputs/routes/pipelines for a **selected pack**:
+
+- Create **Generic HTTP API** provider **cribl_packs** (same OAuth) with endpoints:
+
+| name                | datafield | method | url |
+|---------------------|-----------|--------|-----|
+| cribl_packs_inputs  | items     | get    | https://&lt;workspace&gt;-&lt;org&gt;.cribl.cloud/api/v1/m/${worker_group}/p/${pack}/system/inputs |
+| cribl_packs_outputs | items     | get    | https://&lt;workspace&gt;-&lt;org&gt;.cribl.cloud/api/v1/m/${worker_group}/p/${pack}/system/outputs |
+| cribl_packs_routes  | items     | get    | https://&lt;workspace&gt;-&lt;org&gt;.cribl.cloud/api/v1/m/${worker_group}/p/${pack}/routes |
+| cribl_packs_pipelines| items    | get    | https://&lt;workspace&gt;-&lt;org&gt;.cribl.cloud/api/v1/m/${worker_group}/p/${pack}/pipelines |
+
+- Create dataset **cribl_packs** with provider **cribl_packs**, enable those endpoints, add the pack’s **cribl_packs** ruleset. Update the **cribl_packs** macro if you change the dataset name.
+
+---
+
 ## Edge Node Statistics Dashboard
 
 The pack adds the **Edge Node Statistics** dashboard. Data comes from **cribl_worker_metrics** (Leader `master/workers` API).
@@ -92,32 +109,11 @@ The pack adds the **Edge Node Statistics** dashboard. Data comes from **cribl_wo
 
 ---
 
-## Optional: Pack Details Dashboard
-
-To show inputs/outputs/routes/pipelines for a **selected pack**:
-
-- Create **Generic HTTP API** provider **cribl_packs** (same OAuth) with endpoints:
-
-| name                | datafield | method | url |
-|---------------------|-----------|--------|-----|
-| cribl_packs_inputs  | items     | get    | https://&lt;workspace&gt;-&lt;org&gt;.cribl.cloud/api/v1/m/${worker_group}/p/${pack}/system/inputs |
-| cribl_packs_outputs | items     | get    | https://&lt;workspace&gt;-&lt;org&gt;.cribl.cloud/api/v1/m/${worker_group}/p/${pack}/system/outputs |
-| cribl_packs_routes  | items     | get    | https://&lt;workspace&gt;-&lt;org&gt;.cribl.cloud/api/v1/m/${worker_group}/p/${pack}/routes |
-| cribl_packs_pipelines| items    | get    | https://&lt;workspace&gt;-&lt;org&gt;.cribl.cloud/api/v1/m/${worker_group}/p/${pack}/pipelines |
-
-- Create dataset **cribl_packs** with provider **cribl_packs**, enable those endpoints, add the pack’s **cribl_packs** ruleset. Update the **cribl_packs** macro if you change the dataset name.
-
----
-
 ## Release Notes
 
 | Version | Date       | Changes |
 |---------|------------|--------|
 | 1.1.8   | 2026-02-17 | Edge Node Statistics: fleet-wide KPIs (in/out events, in/out bytes), top-10 bar charts, composition donuts (share by host); removed line charts (data is just-in-time API snapshot). |
-| 1.1.7   | 2026-02-17 | Edge Node Statistics: added metrics-over-time line charts (one point per report, one line per host; in/out events and bytes). |
-| 1.1.6   | 2026-02-17 | Edge Node Statistics: two tables only (top 10 by bytes in, top 10 by events in); Time Range and Fleet filter; removed Data Activity / line charts. |
-| 1.1.2   | 2026-02-17 | Edge Node Statistics: time picker; both tables use **cribl_worker_metrics**. |
-| 1.1.1   | 2026-01-27 | Correct Search syntax for throughput metrics (`lastMetrics["total.*"]`). |
 | 1.0.1   | 2026-01-27 | Typos and instruction clarifications. |
 | 0.9.1   | 2025-12-19 | Beta release. |
 

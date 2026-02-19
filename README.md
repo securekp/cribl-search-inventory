@@ -1,132 +1,136 @@
 # Cribl Inventory
 
-This pack helps you see your Cribl infrastructure, configurations, and **node metrics** in one place. It displays worker groups, routes, pipelines, packs, and a **Heavy Talkers** dashboard for Edge and Worker nodes.
+This pack uses Cribl Search **HTTP API Dataset** providers to pull data from the Cribl Stream/Edge API. It gives you a single place to see worker groups, routes, pipelines, packs, inputs, outputs, and an **Edge Node Statistics** dashboard (fleet-wide KPIs, bar charts, composition donuts, and top 10 tables, filterable by Fleet).
 
-## About this Pack
+## What You Get
 
-- Uses the **HTTP API Dataset** provider in Cribl Search to pull data from the Cribl Stream/Edge API
-- **Configuration**: worker groups, routes, pipelines, packs, inputs, outputs
-- **Metrics**: worker/edge node list for **Heavy Talkers** (top nodes by throughput), filterable by **Fleet** or **Worker group**
-- Helps new admins see what’s configured and which nodes are busiest
+- **Worker groups** – List of groups/fleets from the Leader API
+- **Stream inventory** – Routes, pipelines, packs, inputs, outputs per worker group, using a variabilized `${worker_group}` URL
+- **Edge Node Statistics** – Dashboard: Fleet filter; fleet-wide KPI cards (in/out events, in/out bytes); top-10 horizontal bar charts; composition donuts (share of in bytes / in events by host); two tables—top 10 by bytes in and top 10 by events in; from **cribl_worker_metrics** (Leader `master/workers` API)
 
-## Deployment
+## Deployment Overview
 
-### 1. Configure Dataset Provider for Worker Groups
+You will create **three dataset providers** and **three datasets** (plus one optional for pack details):
 
-- Go to **Data → Dataset providers**.
-- Create a new **Generic HTTP API** provider named **cribl_worker_groups**.
-- Add one endpoint:
-  - **name**: `cribl_groups`
-  - **datafield**: `items`
-  - **method**: get
-  - **url**: `https://<workspace>-<org>.cribl.cloud/api/v1/master/groups`
-- **Authorization** tab: **OAuth**
-  - Create API credentials with admin permissions: [Cribl Cloud API](https://docs.cribl.io/api#criblcloud)
-  - **Login url**: `https://login.cribl.cloud/oauth/token`
-  - **client secret parameter**: `client_secret`
-  - **client secret value**: your API credential secret
-  - **Extra auth parameters** (exact names):
-    - `audience` = `https://api.cribl.cloud`
-    - `client_id` = your API client_id
-    - `grant_type` = `client_credentials`
-  - **token_attribute**: `access_token`
-  - **Authorization header**: `Authorization`
-  - **authorize expression**: `Bearer ${token}`
-
-### 2. Configure Dataset Provider for Configuration Items
-
-- Create a **Generic HTTP API** provider named **cribl_stream_inventory**.
-- Add these endpoints (same OAuth as above; replace `<workspace>-<org>` in base URL):
-
-| name           | datafield | method | url |
-|----------------|-----------|--------|-----|
-| cribl_routes   | items     | get    | https://&lt;workspace&gt;-&lt;org&gt;.cribl.cloud/api/v1/m/${worker_group}/routes |
-| cribl_pipelines| items     | get    | https://&lt;workspace&gt;-&lt;org&gt;.cribl.cloud/api/v1/m/${worker_group}/pipelines |
-| cribl_packs    | items     | get    | https://&lt;workspace&gt;-&lt;org&gt;.cribl.cloud/api/v1/m/${worker_group}/packs |
-| cribl_inputs   | items     | get    | https://&lt;workspace&gt;-&lt;org&gt;.cribl.cloud/api/v1/m/${worker_group}/system/inputs?includePacks=true |
-| cribl_outputs  | items     | get    | https://&lt;workspace&gt;-&lt;org&gt;.cribl.cloud/api/v1/m/${worker_group}/system/outputs?includePacks=true |
-
-- Use the same **OAuth** settings as in step 1.
-
-### 3. Configure Dataset Provider for Metrics (Heavy Talkers)
-
-- Create a **Generic HTTP API** provider named **cribl_metrics**.
-- Add one endpoint:
-  - **name**: `cribl_worker_metrics`
-  - **datafield**: `items`
-  - **method**: get
-  - **url**: `https://<workspace>-<org>.cribl.cloud/api/v1/master/workers`
-- Use the same **OAuth** settings as in step 1.
-
-> **Note:** The Cribl API returns workers from all groups (Stream worker groups and Edge fleets). The response may use `items` or another array key; if your API uses a different key (e.g. `workers`), set **datafield** to that key. The **Heavy Talkers** dashboard expects fields such as `group`, `id`, `info.hostname`, `lastMsgTime`, `status`. Throughput metrics in Search use bracket syntax on **`lastMetrics`**: `lastMetrics["total.in_events"]`, `lastMetrics["total.out_events"]`, `lastMetrics["total.in_bytes"]`, `lastMetrics["total.out_bytes"]`. The dashboard uses these first and falls back to flat camelCase/snake_case if present.
-
-### 4. Configure Cribl Worker Groups Dataset
-
-- **Data → Datasets**: create **cribl_worker_groups**.
-  - **Dataset provider**: cribl_worker_groups
-  - **Enabled endpoints**: cribl_groups
-- If you use a different dataset name, update the **cribl_worker_groups** macro in the pack to match.
-
-### 5. Configure Cribl Inventory Dataset
-
-- Create dataset **cribl_stream_inventory**.
-  - **Dataset provider**: cribl_stream_inventory
-  - **Enabled endpoints**: cribl_routes, cribl_pipelines, cribl_packs, cribl_inputs, cribl_outputs
-  - **Processing**: add the pack’s **cribl_stream_inventory** datatype ruleset
-- If you use a different name, update the **cribl_stream_inventory** macro.
-
-### 6. Configure Cribl Worker Metrics Dataset
-
-- Create dataset **cribl_worker_metrics**.
-  - **Dataset provider**: cribl_metrics
-  - **Enabled endpoints**: cribl_worker_metrics
-  - **Processing**: add the pack’s **cribl_worker_metrics** datatype ruleset
-- If you use a different name, update the **cribl_worker_metrics** macro.
-
-### 7. Heavy Talkers Dashboard
-
-- The pack adds the **Heavy Talkers – Edge & Worker Nodes** dashboard.
-- **Fleet (Edge)** dropdown: filter Edge heavy talkers by fleet (uses groups where `isFleet==true`).
-- **Worker Group (Stream)** dropdown: filter Worker heavy talkers by worker group (`isFleet==false`).
-- Tables show top nodes by outbound events (or by `lastMsgTime` if event metrics are not in the API).
-- Ensure the **cribl_worker_groups** dataset exposes **isFleet** so Fleet vs Worker group filters work. If your `/api/v1/master/groups` response uses a different field name, adjust the dashboard queries accordingly.
+| Provider               | Dataset                | Purpose |
+|------------------------|------------------------|--------|
+| cribl_worker_groups    | cribl_worker_groups    | Groups/fleets list (Fleet dropdown in Edge Node Statistics; Stream Configuration, Pack Information) |
+| cribl_stream_inventory | cribl_stream_inventory | Config per `${worker_group}` (routes, pipelines, packs, inputs, outputs) |
+| cribl_metrics          | cribl_worker_metrics   | Leader `master/workers` – **Edge Node Statistics** (KPIs, bar charts, donuts, top 10 by bytes/events) |
 
 ---
 
-### OPTIONAL: Dataset Provider and Dataset for Pack Details
+## Step 1: OAuth (used by all providers)
 
-To show inputs/outputs/routes/pipelines for a **selected pack** (second dashboard):
+Create API credentials with admin permissions: [Cribl Cloud API](https://docs.cribl.io/api#criblcloud). You will use the same OAuth settings for every provider below.
 
-- Create **Generic HTTP API** provider **cribl_packs** with OAuth as above and endpoints:
+- **Login url**: `https://login.cribl.cloud/oauth/token`
+- **client secret parameter**: `client_secret`  
+- **client secret value**: your API credential secret
+- **Extra auth parameters**: `audience` = `https://api.cribl.cloud`, `client_id` = your client_id, `grant_type` = `client_credentials`
+- **token_attribute**: `access_token`
+- **Authorization header**: `Authorization`
+- **authorize expression**: `Bearer ${token}`
 
-| name               | datafield | method | url |
-|--------------------|-----------|--------|-----|
+---
+
+## Step 2: Provider and Dataset – Worker Groups
+
+- **Data → Dataset providers** → **Generic HTTP API** named **cribl_worker_groups**.
+- **Endpoint**: name `cribl_groups`, datafield `items`, method get, url `https://<workspace>-<org>.cribl.cloud/api/v1/master/groups`
+- OAuth: use the settings from Step 1.
+- **Data → Datasets** → create **cribl_worker_groups**, provider **cribl_worker_groups**, enable **cribl_groups**, save.
+
+This dataset drives the **Fleet** dropdown on the Edge Node Statistics dashboard (groups with `isFleet==true`) and the Stream Configuration and Pack Information dashboards.
+
+---
+
+## Step 3: Provider and Dataset – Stream Inventory (config)
+
+- **Data → Dataset providers** → **Generic HTTP API** named **cribl_stream_inventory**.
+- Add these endpoints (same OAuth; replace `<workspace>-<org>` with your base):
+
+| name          | datafield | method | url |
+|---------------|-----------|--------|-----|
+| cribl_routes  | items     | get    | https://&lt;workspace&gt;-&lt;org&gt;.cribl.cloud/api/v1/m/${worker_group}/routes |
+| cribl_pipelines| items    | get    | https://&lt;workspace&gt;-&lt;org&gt;.cribl.cloud/api/v1/m/${worker_group}/pipelines |
+| cribl_packs   | items     | get    | https://&lt;workspace&gt;-&lt;org&gt;.cribl.cloud/api/v1/m/${worker_group}/packs |
+| cribl_inputs  | items     | get    | https://&lt;workspace&gt;-&lt;org&gt;.cribl.cloud/api/v1/m/${worker_group}/system/inputs?includePacks=true |
+| cribl_outputs | items     | get    | https://&lt;workspace&gt;-&lt;org&gt;.cribl.cloud/api/v1/m/${worker_group}/system/outputs?includePacks=true |
+
+- **Data → Datasets** → create **cribl_stream_inventory**, provider **cribl_stream_inventory**, enable all five endpoints, add the pack’s **cribl_stream_inventory** datatype ruleset.
+
+---
+
+## Step 4: Provider and Dataset – Metrics (Edge Node Statistics)
+
+- **Data → Dataset providers** → **Generic HTTP API** named **cribl_metrics**.
+- **Endpoint**: name `cribl_worker_metrics`, datafield `items`, method get, url `https://<workspace>-<org>.cribl.cloud/api/v1/master/workers`
+- OAuth: use the settings from Step 1.
+- **Data → Datasets** → create **cribl_worker_metrics**, provider **cribl_metrics**, enable **cribl_worker_metrics**, add the pack’s **cribl_worker_metrics** datatype ruleset.
+
+The Leader `master/workers` API returns workers from all groups (Stream worker groups and Edge fleets). The dashboard expects fields such as `group`, `id`, `info.hostname`, `lastMsgTime`, `status`. Throughput uses **lastMetrics** with bracket syntax: `lastMetrics["total.in_events"]`, `lastMetrics["total.out_events"]`, `lastMetrics["total.in_bytes"]`, `lastMetrics["total.out_bytes"]`, and falls back to flat camelCase/snake_case if your API returns those. If your API uses a different array key than `items` (e.g. `workers`), set **datafield** accordingly.
+
+---
+
+## Edge Node Statistics Dashboard
+
+The pack adds the **Edge Node Statistics** dashboard. Data comes from **cribl_worker_metrics** (Leader `master/workers` API).
+
+- **Time Range** – Picker sets the time window for dataset refresh.
+- **Fleet** – Dropdown filters by Edge fleet (from cribl_worker_groups, `isFleet==true`). Choose * for all fleets.
+- **Fleet-wide KPIs** – Four single-value cards: total In events, In bytes, Out events, Out bytes across the selected fleet.
+- **Bar charts** – Top 10 Edge nodes by bytes in and by events in (horizontal bars).
+- **Composition donuts** – Share of in bytes by host and share of in events by host.
+- **Tables** – Top 10 Edge nodes by bytes in (host, id, in_bytes, out_bytes, lastMsgTime) and top 10 by events in (host, id, in_events, out_events, lastMsgTime). When metrics are not available, sorting uses lastMsgTime.
+
+---
+
+## Notes
+
+- If you rename any dataset, update the corresponding macro in the pack (cribl_worker_groups, cribl_stream_inventory, cribl_worker_metrics).
+
+---
+
+## Optional: Pack Details Dashboard
+
+To show inputs/outputs/routes/pipelines for a **selected pack**:
+
+- Create **Generic HTTP API** provider **cribl_packs** (same OAuth) with endpoints:
+
+| name                | datafield | method | url |
+|---------------------|-----------|--------|-----|
 | cribl_packs_inputs  | items     | get    | https://&lt;workspace&gt;-&lt;org&gt;.cribl.cloud/api/v1/m/${worker_group}/p/${pack}/system/inputs |
 | cribl_packs_outputs | items     | get    | https://&lt;workspace&gt;-&lt;org&gt;.cribl.cloud/api/v1/m/${worker_group}/p/${pack}/system/outputs |
 | cribl_packs_routes  | items     | get    | https://&lt;workspace&gt;-&lt;org&gt;.cribl.cloud/api/v1/m/${worker_group}/p/${pack}/routes |
-| cribl_packs_pipelines| items     | get    | https://&lt;workspace&gt;-&lt;org&gt;.cribl.cloud/api/v1/m/${worker_group}/p/${pack}/pipelines |
+| cribl_packs_pipelines| items    | get    | https://&lt;workspace&gt;-&lt;org&gt;.cribl.cloud/api/v1/m/${worker_group}/p/${pack}/pipelines |
 
-- Create dataset **cribl_packs** with provider **cribl_packs**, enable those endpoints, and add the pack’s **cribl_packs** processing ruleset. Update the **cribl_packs** macro if you change the dataset name.
+- Create dataset **cribl_packs** with provider **cribl_packs**, enable those endpoints, add the pack’s **cribl_packs** ruleset. Update the **cribl_packs** macro if you change the dataset name.
+
+---
 
 ## Release Notes
-### Version 1.1.1
-Heavy Talkers dashboard: use correct Search syntax for throughput metrics (`lastMetrics["total.in_events"]`, `lastMetrics["total.out_events"]`, and byte fields). README updated for metric field names and bracket syntax.
 
-### Version 1.0.1 - 2026-01-27
-Fix a couple of typos and clarify some instructions.
+| Version | Date       | Changes |
+|---------|------------|--------|
+| 1.1.8   | 2026-02-17 | Edge Node Statistics: fleet-wide KPIs (in/out events, in/out bytes), top-10 bar charts, composition donuts (share by host); removed line charts (data is just-in-time API snapshot). |
+| 1.1.7   | 2026-02-17 | Edge Node Statistics: added metrics-over-time line charts (one point per report, one line per host; in/out events and bytes). |
+| 1.1.6   | 2026-02-17 | Edge Node Statistics: two tables only (top 10 by bytes in, top 10 by events in); Time Range and Fleet filter; removed Data Activity / line charts. |
+| 1.1.2   | 2026-02-17 | Edge Node Statistics: time picker; both tables use **cribl_worker_metrics**. |
+| 1.1.1   | 2026-01-27 | Correct Search syntax for throughput metrics (`lastMetrics["total.*"]`). |
+| 1.0.1   | 2026-01-27 | Typos and instruction clarifications. |
+| 0.9.1   | 2025-12-19 | Beta release. |
 
-### Version 0.9.1 - 2025-12-19
-Beta Release
-
-- Beta release.
+---
 
 ## Contributing
 
-To contribute or report issues, reach out to Kelsey Prior (cribl.io) on [Cribl Community Slack](https://cribl-community.slack.com).
+Reach out to Kelsey Prior (cribl.io) on [Cribl Community Slack](https://cribl-community.slack.com).
 
 ## Contact
 
 kprior@cribl.io
 
 ## License
-This Pack uses the following license: [`Apache 2.0`](https://github.com/criblio/appscope/blob/master/LICENSE).
+
+[Apache 2.0](https://github.com/criblio/appscope/blob/master/LICENSE)

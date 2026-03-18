@@ -12,11 +12,11 @@ This pack uses Cribl Search **HTTP API Dataset** providers for config data and t
 
 You will create **two dataset providers** and **two datasets** for config dashboards (plus one optional for pack details). **Heavy Talkers for Edge** uses the **built-in cribl_metrics** dataset in Cribl Search (no provider or dataset setup required).
 
-| Provider               | Dataset                | Purpose |
-|------------------------|------------------------|--------|
-| cribl_worker_groups    | cribl_worker_groups    | Groups/fleets list (Stream Configuration, Pack Information) |
-| cribl_stream_inventory | cribl_stream_inventory | Config per `${worker_group}` (routes, pipelines, packs, inputs, outputs) |
-| *(built-in)*           | **cribl_metrics**      | **Heavy Talkers for Edge** – in/out bytes and events per Edge node (filter by fleet and time range) |
+**cribl_worker_groups** (provider and dataset: `cribl_worker_groups`) — Groups/fleets list for Stream Configuration and Pack Information.
+
+**cribl_stream_inventory** (provider and dataset: `cribl_stream_inventory`) — Config per `${worker_group}` (routes, pipelines, packs, inputs, outputs).
+
+**cribl_metrics** (built-in dataset in Cribl Search; no provider) — **Heavy Talkers for Edge**: in/out bytes and events per Edge node; filter by fleet and time range.
 
 ---
 
@@ -50,13 +50,11 @@ This dataset drives the **Worker Group / Fleet** dropdowns on the Stream Configu
 - **Data → Dataset providers** → **Generic HTTP API** named **cribl_stream_inventory**.
 - Add these endpoints (same OAuth; replace `<workspace>-<org>` with your base):
 
-| name          | datafield | method | url |
-|---------------|-----------|--------|-----|
-| cribl_routes  | items     | get    | https://&lt;workspace&gt;-&lt;org&gt;.cribl.cloud/api/v1/m/${worker_group}/routes |
-| cribl_pipelines| items    | get    | https://&lt;workspace&gt;-&lt;org&gt;.cribl.cloud/api/v1/m/${worker_group}/pipelines |
-| cribl_packs   | items     | get    | https://&lt;workspace&gt;-&lt;org&gt;.cribl.cloud/api/v1/m/${worker_group}/packs |
-| cribl_inputs  | items     | get    | https://&lt;workspace&gt;-&lt;org&gt;.cribl.cloud/api/v1/m/${worker_group}/system/inputs?includePacks=true |
-| cribl_outputs | items     | get    | https://&lt;workspace&gt;-&lt;org&gt;.cribl.cloud/api/v1/m/${worker_group}/system/outputs?includePacks=true |
+- **cribl_routes** — datafield `items`, get — `https://<workspace>-<org>.cribl.cloud/api/v1/m/${worker_group}/routes`
+- **cribl_pipelines** — datafield `items`, get — `https://<workspace>-<org>.cribl.cloud/api/v1/m/${worker_group}/pipelines`
+- **cribl_packs** — datafield `items`, get — `https://<workspace>-<org>.cribl.cloud/api/v1/m/${worker_group}/packs`
+- **cribl_inputs** — datafield `items`, get — `https://<workspace>-<org>.cribl.cloud/api/v1/m/${worker_group}/system/inputs?includePacks=true`
+- **cribl_outputs** — datafield `items`, get — `https://<workspace>-<org>.cribl.cloud/api/v1/m/${worker_group}/system/outputs?includePacks=true`
 
 - **Data → Datasets** → create **cribl_stream_inventory**, provider **cribl_stream_inventory**, enable all five endpoints, add the pack’s **cribl_stream_inventory** datatype ruleset.
 
@@ -87,12 +85,10 @@ To show inputs/outputs/routes/pipelines for a **selected pack**:
 
 - Create **Generic HTTP API** provider **cribl_packs** (same OAuth) with endpoints:
 
-| name                | datafield | method | url |
-|---------------------|-----------|--------|-----|
-| cribl_packs_inputs  | items     | get    | https://&lt;workspace&gt;-&lt;org&gt;.cribl.cloud/api/v1/m/${worker_group}/p/${pack}/system/inputs |
-| cribl_packs_outputs | items     | get    | https://&lt;workspace&gt;-&lt;org&gt;.cribl.cloud/api/v1/m/${worker_group}/p/${pack}/system/outputs |
-| cribl_packs_routes  | items     | get    | https://&lt;workspace&gt;-&lt;org&gt;.cribl.cloud/api/v1/m/${worker_group}/p/${pack}/routes |
-| cribl_packs_pipelines| items    | get    | https://&lt;workspace&gt;-&lt;org&gt;.cribl.cloud/api/v1/m/${worker_group}/p/${pack}/pipelines |
+- **cribl_packs_inputs** — datafield `items`, get — `https://<workspace>-<org>.cribl.cloud/api/v1/m/${worker_group}/p/${pack}/system/inputs`
+- **cribl_packs_outputs** — datafield `items`, get — `https://<workspace>-<org>.cribl.cloud/api/v1/m/${worker_group}/p/${pack}/system/outputs`
+- **cribl_packs_routes** — datafield `items`, get — `https://<workspace>-<org>.cribl.cloud/api/v1/m/${worker_group}/p/${pack}/routes`
+- **cribl_packs_pipelines** — datafield `items`, get — `https://<workspace>-<org>.cribl.cloud/api/v1/m/${worker_group}/p/${pack}/pipelines`
 
 - Create dataset **cribl_packs** with provider **cribl_packs**, enable those endpoints, add the pack’s **cribl_packs** ruleset. Update the **cribl_packs** macro if you change the dataset name.
 
@@ -100,12 +96,10 @@ To show inputs/outputs/routes/pipelines for a **selected pack**:
 
 ## Release Notes
 
-| Version | Date       | Changes |
-|---------|------------|--------|
-| 1.1.2   | 2026-02-17 | Heavy Talkers: time picker; in/out column order; both tables use **cribl_worker_metrics** (Worker table filters by group; avoids 404 when `/m/{group}/workers` not available). |
-| 1.1.1   | 2026-01-27 | Heavy Talkers: correct Search syntax for throughput metrics (`lastMetrics["total.*"]`). |
-| 1.0.1   | 2026-01-27 | Typos and instruction clarifications. |
-| 0.9.1   | 2025-12-19 | Beta release. |
+- **1.1.2** (2026-02-17) — Heavy Talkers: time picker; in/out column order; both tables use **cribl_worker_metrics** (Worker table filters by group; avoids 404 when `/m/{group}/workers` not available).
+- **1.1.1** (2026-01-27) — Heavy Talkers: correct Search syntax for throughput metrics (`lastMetrics["total.*"]`).
+- **1.0.1** (2026-01-27) — Typos and instruction clarifications.
+- **0.9.1** (2025-12-19) — Beta release.
 
 ---
 

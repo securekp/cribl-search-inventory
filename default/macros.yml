@@ -1,27 +1,27 @@
 cribl_stream_inventory:
   lib: custom
   description: This is the dataset that will be used for most of the dashboard
-  replacement: dataset='cribl_stream_inventory'
+  replacement: 'dataset="cribl_stream_inventory"'
   createdBy: Kelsey Prior
   modified: 1765911030200
   created: 1765911030200
 cribl_worker_groups:
   lib: custom
   description: This is used for the worker group dropdown in the dashboard
-  replacement: dataset='cribl_worker_groups'
+  replacement: 'dataset="cribl_worker_groups"'
   createdBy: Kelsey Prior
   modified: 1765911050485
   created: 1765911050485
 cribl_packs:
   lib: custom
-  replacement: 'dataset="cribl_packs" '
+  replacement: 'dataset="cribl_packs"'
   createdBy: Kelsey Prior
   modified: 1766000352972
   created: 1766000352972
 cribl_worker_metrics:
   lib: custom
   description: Dataset for worker/edge metrics (Edge Node Statistics)
-  replacement: dataset='cribl_worker_metrics'
+  replacement: 'dataset="cribl_worker_metrics"'
   createdBy: Kelsey Prior
   modified: 1769600000000
   created: 1769600000000

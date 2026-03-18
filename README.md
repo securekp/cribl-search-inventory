@@ -48,7 +48,7 @@ Single Leader call listing worker groups and fleets (including Edge fleets).
 - **Data → Dataset providers** → **Generic HTTP API** **cribl_worker_groups**
 - **Endpoint** `cribl_groups`: datafield `items`, get — `https://<workspace>-<org>.cribl.cloud/api/v1/master/groups`
 - OAuth: **OAuth (all providers)**
-- **Data → Datasets** → **cribl_worker_groups**, enable **cribl_groups**, add datatype ruleset
+- **Data → Datasets** → **cribl_worker_groups**, enable **cribl_groups**
 
 ---
 
@@ -70,7 +70,7 @@ Config for the selected worker group; URLs use `${worker_group}`.
    - **cribl_inputs** — `https://<workspace>-<org>.cribl.cloud/api/v1/m/${worker_group}/system/inputs?includePacks=true`
    - **cribl_outputs** — `https://<workspace>-<org>.cribl.cloud/api/v1/m/${worker_group}/system/outputs?includePacks=true`
 
-4. **Data → Datasets** → **cribl_stream_inventory**, enable all five endpoints, add **cribl_stream_inventory** ruleset
+4. **Data → Datasets** → **cribl_stream_inventory**, enable all five endpoints, add **cribl_stream_inventory** datatype ruleset under processing
 
 ---
 
@@ -93,7 +93,7 @@ Dashboard: snapshot of Edge fleet workers from **`master/workers`**—fleet-wide
 2. **Data → Dataset providers** → **Generic HTTP API** **cribl_metrics**
 3. **Endpoint** `cribl_worker_metrics`: datafield `items`, get — `https://<workspace>-<org>.cribl.cloud/api/v1/master/workers`
 4. OAuth: **OAuth (all providers)**
-5. **Data → Datasets** → **cribl_worker_metrics**, enable **cribl_worker_metrics**, add **cribl_worker_metrics** ruleset
+5. **Data → Datasets** → **cribl_worker_metrics**, enable **cribl_worker_metrics**, add **cribl_worker_metrics** datatype ruleset under processing
 
 ---
 
@@ -112,7 +112,7 @@ Pack-scoped inputs, outputs, routes, pipelines under **`${worker_group}`** and *
    - **cribl_packs_routes** — `https://<workspace>-<org>.cribl.cloud/api/v1/m/${worker_group}/p/${pack}/routes`
    - **cribl_packs_pipelines** — `https://<workspace>-<org>.cribl.cloud/api/v1/m/${worker_group}/p/${pack}/pipelines`
 
-4. **Data → Datasets** → **cribl_packs**, enable endpoints, add **cribl_packs** ruleset; update the **cribl_packs** macro if you rename the dataset
+4. **Data → Datasets** → **cribl_packs**, enable endpoints, add **cribl_packs** datatype ruleset under processing
 
 ---
 

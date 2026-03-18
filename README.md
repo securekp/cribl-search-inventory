@@ -25,8 +25,6 @@ You will create **three dataset providers** and **three datasets** (plus one opt
 2. **Worker groups** → **Stream inventory** → **Edge Node Statistics** (metrics)  
 3. **Pack Details** (optional)
 
-**Endpoint datafield** — On every HTTP API endpoint in this pack, set **datafield** to **`items`** (the API returns the record list under `items`).
-
 ---
 
 ## OAuth (all providers)
@@ -148,7 +146,7 @@ If you rename any dataset, update the corresponding macro in the pack (**cribl_w
 
 ## Release Notes
 
-- **1.1.9** (2026-02-17) — README: list-style deployment/endpoints; Edge Node Statistics + setup in one section; same section pattern across OAuth, worker groups, stream inventory, Edge Node Statistics, Pack Details; **datafield `items`** note; macros use `dataset="..."`. Dashboard doc alignment.
+- **1.1.9** (2026-02-17) — README: list-style deployment/endpoints; Edge Node Statistics + setup in one section; same section pattern across OAuth, worker groups, stream inventory, Edge Node Statistics, Pack Details; macros use `dataset="..."`. Dashboard doc alignment.
 - **1.1.8** (2026-02-17) — Edge Node Statistics: fleet-wide KPIs (in/out events, in/out bytes), top-10 bar charts, composition pie charts (share by host); removed line charts (data is just-in-time API snapshot).
 - **1.0.1** (2026-01-27) — Typos and instruction clarifications.
 - **0.9.1** (2025-12-19) — Beta release.
